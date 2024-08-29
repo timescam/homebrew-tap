@@ -52,10 +52,10 @@ jobs:
         sed -i '' "s/version \".*\"/version \"${{ steps.get_version.outputs.release }}\"/" Casks/zen-browser.rb
     - name: Update ARM sha256
       run: |
-          sed -i '' "s/sha256 arm:   \".*\"/sha256 arm:   \"${{ steps.sha256_arm.outputs.sha256 }}\"/" Casks/zen-browser.rb
+        sed -i '' "s/sha256 arm:   \"[a-z0-9]+\",/sha256 arm:   \"${{ steps.sha256_arm.outputs.sha256 }}\",/g" Casks/zen-browser.rb
     - name: Update Intel sha256sum
       run: |
-          sed -i '' "s/sha256 intel:   \".*\"/sha256 intel:   \"${{ steps.sha256_intel.outputs.sha256 }}\"/" Casks/zen-browser.rb
+        sed -i '' "s/intel: \"[a-z0-9]+\"/intel: \"${{ steps.sha256_intel.outputs.sha256 }}\"/g" Casks/zen-browser.rb
     
     - name: Commit Changes
       uses: stefanzweifel/git-auto-commit-action@v5
