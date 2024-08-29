@@ -47,10 +47,14 @@ jobs:
         sha256=$(shasum -a 256 zen.macos-x64.dmg | awk '{print $1}')
         echo "sha256=$sha256" >> $GITHUB_OUTPUT
         
-    - name: Update Cask Formula
+    - name: Update version
       run: |
-        sed -i '' "s/version \".*\"/version \"${{ steps.get_version.outputs.release }}\"/" Casks/zen-browser.rb && \
+        sed -i '' "s/version \".*\"/version \"${{ steps.get_version.outputs.release }}\"/" Casks/zen-browser.rb
+    - name: Update ARM sha256
+      run: |
           sed -i '' "s/sha256 arm:   \".*\"/sha256 arm:   \"${{ steps.sha256_arm.outputs.sha256 }}\"/" Casks/zen-browser.rb
+    - name: Update Intel sha256sum
+      run: |
           sed -i '' "s/sha256 intel:   \".*\"/sha256 intel:   \"${{ steps.sha256_intel.outputs.sha256 }}\"/" Casks/zen-browser.rb
     
     - name: Commit Changes
