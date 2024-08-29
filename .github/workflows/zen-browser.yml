@@ -1,20 +1,8 @@
-# This is a basic workflow that is manually triggered
-
 name: Zen Browser
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Update zen-browser cask'
-        required: false
-
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  workflow_dispatch
+  
 jobs:
   update-cask:
     runs-on: ubuntu-latest
@@ -34,6 +22,7 @@ jobs:
       uses: robinraju/release-downloader@v1
       with:
         repository: 'zen-browser/desktop'
+        latest: true
         fileName: 'zen.macos-aarch64.dmg'
         
     - name: Download Intel artifact
@@ -41,6 +30,7 @@ jobs:
       uses: robinraju/release-downloader@v1
       with:
         repository: 'zen-browser/desktop'
+        latest: true
         fileName: 'zen.macos-x64.dmg'
 
     - name: Calculate ARM SHA-256
