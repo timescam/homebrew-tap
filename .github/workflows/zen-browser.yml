@@ -31,17 +31,17 @@ jobs:
         
     - name: Download ARM artifact
       id: download_artifact_arm
-      uses: dawidd6/action-download-artifact@v6
+      uses: actions/download-artifact@v4
       with:
-        repo: zen-browser/desktop
         name: zen.macos-aarch64.dmg
-
+        repository: zen-browser/desktop
+        
     - name: Download Intel artifact
       id: download_artifact_intel
-      uses: dawidd6/action-download-artifact@v6
+      uses: actions/download-artifact@v4
       with:
-        repo: zen-browser/desktop
         name: zen.macos-x64.dmg
+        repo: zen-browser/desktop
 
     - name: Calculate ARM SHA-256
       id: sha256_arm
