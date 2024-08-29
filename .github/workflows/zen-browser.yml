@@ -31,28 +31,28 @@ jobs:
         
     - name: Download ARM artifact
       id: download_artifact_arm
-      uses: actions/download-artifact@v4
+      uses: robinraju/release-downloader@v1
       with:
-        name: zen.macos-aarch64.dmg
-        repository: zen-browser/desktop
+        repository: 'zen-browser/desktop'
+        fileName: 'zen.macos-aarch64.dmg'
         
     - name: Download Intel artifact
       id: download_artifact_intel
-      uses: actions/download-artifact@v4
+      uses: robinraju/release-downloader@v1
       with:
-        name: zen.macos-x64.dmg
-        repo: zen-browser/desktop
+        repository: 'zen-browser/desktop'
+        fileName: 'zen.macos-x64.dmg'
 
     - name: Calculate ARM SHA-256
       id: sha256_arm
       run: |
-        sha256=$(shasum -a 256 ${{ steps.download_artifact_arm.outputs.download-path }} | awk '{print $1}')
+        sha256=$(shasum -a 256 zen.macos-aarch64.dmg | awk '{print $1}')
         echo "sha256=$sha256" >> $GITHUB_OUTPUT
 
     - name: Calculate Intel SHA-256
       id: sha256_intel
       run: |
-        sha256=$(shasum -a 256 ${{ steps.download_artifact_intel.outputs.download-path }} | awk '{print $1}')
+        sha256=$(shasum -a 256 zen.macos-x64.dmg | awk '{print $1}')
         echo "sha256=$sha256" >> $GITHUB_OUTPUT
         
     - name: Update Cask Formula
