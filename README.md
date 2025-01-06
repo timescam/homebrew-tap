@@ -5,13 +5,13 @@
 Add this tap to your Homebrew:
 
 ```sh
-brew tap rexkyng/homebrew-tap
+brew tap timescam/homebrew-tap
 ```
 
 Then install the formula:
 
 ```sh
-brew install rexkyng/homebrew-tap/{formula}
+brew install timescam/homebrew-tap/{formula}
 ```
 
 ## Available Formulas
