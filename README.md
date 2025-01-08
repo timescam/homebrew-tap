@@ -19,4 +19,4 @@ brew install timescam/homebrew-tap/{formula}
 | Formula          | Version         | Description                                                                                                               |
 | ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `pay-respects`   | `0.6.10`        | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects |
-| `TheBoringNotch` | `glowing-panda` | TheBoringNotch: Not so boring notch That Rocks 🎸🎶 <br />https://github.com/TheBoredTeam/boring.notch/tree/glowing-panda |
+| `TheBoringNotch` | `glowing-panda` | TheBoringNotch: Not so boring notch That Rocks 🎸🎶 <br />https://github.com/TheBoredTeam/boring.notch                    |
