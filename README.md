@@ -18,10 +18,10 @@ Then install the formula:
 brew install timescam/tap/{formula}
 ```
 
-## Available Packages 
+## Available Packages
 
 | Formula          | Version         | Description                                                                                                               |
 | ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `pay-respects`   | `0.6.10`        | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects |
 | `TheBoringNotch` | `glowing-panda` | TheBoringNotch: Not so boring notch That Rocks 🎸🎶 <br />https://github.com/TheBoredTeam/boring.notch                    |
-
+| `peaclock`       | `HEAD`          | A responsive and customizable clock, timer, and stopwatch for the terminal.<br />https://github.com/octobanana/peaclock   |
