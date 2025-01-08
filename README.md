@@ -18,4 +18,4 @@ brew install timescam/homebrew-tap/{formula}
 
 | Formula                                                 | Version | Description                                                                    |
 | ------------------------------------------------------- | ------- | ------------------------------------------------------------------------------ |
-| [`pay-respects`] | `0.6.9` | Command suggestions, command-not-found and thefuck replacement written in Rust |
+| [`pay-respects`] | `0.6.10` | Command suggestions, command-not-found and thefuck replacement written in Rust |
