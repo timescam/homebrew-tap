@@ -83,7 +83,7 @@ jobs:
           EOL
 
           # Update README version
-          sed -i "s/\`pay-respects\`].*|\s*\`[0-9.]*\`\s*|/\`pay-respects\`] | \`${VERSION}\` |/" README.md
+          sed -i "s/\`pay-respects\`.*|\s*\`[0-9.]*\`\s*|/\`pay-respects\` | \`${VERSION}\` |/" README.md
 
       - name: Create Pull Request
         if: steps.current.outputs.version != steps.fetch-release.outputs.version
