@@ -20,12 +20,18 @@ jobs:
           CURRENT_VERSION=$(grep -m 1 'version' Casks/theboringnotch.rb | cut -d '"' -f 2)
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Fetch latest release info
+      - name: Fetch latest version
         id: fetch-release
         run: |
           RELEASE_INFO=$(curl -s "https://api.github.com/repos/TheBoredTeam/boring.notch/releases/latest")
           VERSION=$(echo "$RELEASE_INFO" | jq -r .tag_name)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download and calculate SHA256
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version
+        id: download
+        run: |
+          VERSION="${{ steps.fetch-release.outputs.version }}"
           
           # Convert version to CamelCase for DMG filename
           DMG_VERSION=$(echo "$VERSION" | awk -F'-' '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1' | tr -d ' ')
@@ -50,23 +56,14 @@ jobs:
         if: steps.current.outputs.version != steps.fetch-release.outputs.version
         run: |
           VERSION="${{ steps.fetch-release.outputs.version }}"
-          SHA256="${{ steps.fetch-release.outputs.sha256 }}"
+          SHA256="${{ steps.download.outputs.sha256 }}"
           
-          # Update Cask
-          cat > Casks/theboringnotch.rb << EOL
-          cask "theboringnotch" do
-            version "${VERSION}"
-            sha256 "${SHA256}"
-
-            url "https://github.com/TheBoredTeam/boring.notch/releases/download/#{version}/#{version.split('-').map(&:capitalize).join}.dmg"
-            name "TheBoringNotch"
-            desc "Not so boring notch That Rocks 🎸🎶"
-            homepage "https://github.com/TheBoredTeam/boring.notch"
-
-            app "TheBoringNotch.app"
-          end
-          EOL
-
+          # Update version in Cask
+          sed -i "s/version \".*\"/version \"${VERSION}\"/" Casks/theboringnotch.rb
+          
+          # Update sha256 in Cask
+          sed -i "s/sha256 \".*\"/sha256 \"${SHA256}\"/" Casks/theboringnotch.rb
+          
           # Update README version
           sed -i "s/\`TheBoringNotch\`.*|\s*\`[^']*\`\s*|/\`TheBoringNotch\` | \`${VERSION}\` |/" README.md
 
