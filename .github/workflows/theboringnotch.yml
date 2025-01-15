@@ -34,7 +34,7 @@ jobs:
           VERSION="${{ steps.fetch-release.outputs.version }}"
           
           # Convert version to CamelCase for DMG filename
-          DMG_VERSION=$(echo "$VERSION" | awk -F'-' '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1' | tr -d ' ')
+          DMG_VERSION=$(echo "$VERSION" | awk -F'.' '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1' | tr -d ' ')
           
           # Get download URL and calculate SHA256
           APP_URL="https://github.com/TheBoredTeam/boring.notch/releases/download/${VERSION}/${DMG_VERSION}.dmg"
