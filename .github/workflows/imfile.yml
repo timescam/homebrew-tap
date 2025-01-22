@@ -1,0 +1,105 @@
+name: Update imFile Cask
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:      # Allows manual trigger
+
+jobs:
+  update-cask:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+          fetch-depth: 0
+
+      - name: Get current version
+        id: current
+        run: |
+          CURRENT_VERSION=$(grep -m 1 'version' Casks/imfile.rb | cut -d '"' -f 2)
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Fetch latest version
+        id: fetch-release
+        run: |
+          RELEASE_INFO=$(curl -s "https://api.github.com/repos/imfile-io/imfile-desktop/releases/latest")
+          VERSION=$(echo "$RELEASE_INFO" | jq -r .tag_name | sed 's/^v//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download and calculate SHA256
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version
+        id: download
+        run: |
+          VERSION="${{ steps.fetch-release.outputs.version }}"
+          
+          # Get download URLs and calculate SHA256 for both architectures
+          ARM_URL="https://github.com/imfile-io/imfile-desktop/releases/download/v${VERSION}/imFile-${VERSION}-arm64.dmg"
+          INTEL_URL="https://github.com/imfile-io/imfile-desktop/releases/download/v${VERSION}/imFile-${VERSION}-x64.dmg"
+          
+          ARM_SHA256=$(curl -sL "$ARM_URL" | sha256sum | cut -d ' ' -f 1)
+          INTEL_SHA256=$(curl -sL "$INTEL_URL" | sha256sum | cut -d ' ' -f 1)
+          
+          echo "arm_sha256=$ARM_SHA256" >> $GITHUB_OUTPUT
+          echo "intel_sha256=$INTEL_SHA256" >> $GITHUB_OUTPUT
+
+      - name: Delete old branches
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version
+        run: |
+          git branch -r | grep 'origin/imfile-' | while read -r branch; do
+            branch=${branch#origin/}
+            git push origin --delete "$branch"
+          done
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
+
+      - name: Update Cask and README
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version
+        run: |
+          VERSION="${{ steps.fetch-release.outputs.version }}"
+          ARM_SHA256="${{ steps.download.outputs.arm_sha256 }}"
+          INTEL_SHA256="${{ steps.download.outputs.intel_sha256 }}"
+          
+          # Update version in Cask
+          sed -i "s/version \".*\"/version \"${VERSION}\"/" Casks/imfile.rb
+          
+          # Update ARM SHA256 and URL
+          sed -i "/on arm/,/end/ s/sha256 \".*\"/sha256 \"${ARM_SHA256}\"/" Casks/imfile.rb
+          
+          # Update Intel SHA256 and URL
+          sed -i "/on intel/,/end/ s/sha256 \".*\"/sha256 \"${INTEL_SHA256}\"/" Casks/imfile.rb
+          
+          # Update README version
+          sed -i "s/\`imFile\`.*|\s*\`[^']*\`\s*|/\`imFile\` | \`${VERSION}\` |/" README.md
+
+      - name: Create Pull Request
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PAT }}
+          commit-message: "chore: update imFile to version ${{ steps.fetch-release.outputs.version }}"
+          title: "Update imFile to version ${{ steps.fetch-release.outputs.version }}"
+          body: |
+            Automated update of imFile to version ${{ steps.fetch-release.outputs.version }}
+            
+            - Updated version to ${{ steps.fetch-release.outputs.version }}
+            - Updated SHA256 checksums for both ARM and Intel builds
+            - Updated version in README.md
+          branch: imfile-${{ steps.fetch-release.outputs.version }}
+          delete-branch: true
+
+      - name: Enable Auto-Merge
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.cpr.outputs.pull-request-number
+        run: |
+          # Wait for status checks to complete (max 2 minutes)
+          for i in {1..24}; do
+            status=$(gh pr view "${{ steps.cpr.outputs.pull-request-number }}" --Json mergeable -q .mergeable)
+            if [ "$status" = "MERGEABLE" ]; then
+              gh pr merge --auto --merge "${{ steps.cpr.outputs.pull-request-number }}"
+              break
+            fi
+            sleep 5
+          done
+        env:
+          GH_TOKEN: ${{ secrets.PAT }} 
