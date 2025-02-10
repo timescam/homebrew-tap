@@ -64,10 +64,10 @@ jobs:
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/localsend-go.rb
           
           # Update ARM SHA256
-          sed -i "/on_arm do/,/end/ s/sha256 \".*\"/sha256 \"${ARM_SHA256}\"/" Formula/localsend-go.rb
+          sed -i "/on_arm do/,/sha256/ s/sha256 \".*\"/sha256 \"${ARM_SHA256}\"/" Formula/localsend-go.rb
           
           # Update x86 SHA256
-          sed -i "/on_intel do/,/end/ s/sha256 \".*\"/sha256 \"${X86_SHA256}\"/" Formula/localsend-go.rb
+          sed -i "/on_intel do/,/sha256/ s/sha256 \".*\"/sha256 \"${X86_SHA256}\"/" Formula/localsend-go.rb
           
           # Update README version
           sed -i "s/\`localsend-go\`.*|\s*\`[0-9.]*\`\s*|/\`localsend-go\` | \`${VERSION}\` |/" README.md
@@ -102,4 +102,4 @@ jobs:
             sleep 5
           done
         env:
-          GH_TOKEN: ${{ secrets.PAT }} 
+          GH_TOKEN: ${{ secrets.PAT }}

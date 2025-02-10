@@ -5,12 +5,12 @@ class LocalsendGo < Formula
 
   on_arm do
     url "https://github.com/meowrain/localsend-go/releases/download/v#{version}/localsend_cli-darwin-arm64"
-    sha256 "19d48ec815248be5a410926a08c4f810a46b7602b3235709d102fb546adf39a9"
+    sha256 "bb4cd615e7b8ab72858a264544919f2231b45c9fb5a09fdb9c8ec45f39e56132"
   end
 
   on_intel do
     url "https://github.com/meowrain/localsend-go/releases/download/v#{version}/localsend_cli-darwin-amd64"
-    sha256 "bd0e43641b93ecf744a352e9ee1ad0736d8c10cd06f972ddb7ae98237122ba93"
+    sha256 "d07c12de7268cde60bf13e9ad5346ba0611ed881a260ce48aeccb52d2dcd9fc8"
   end
 
   def install
