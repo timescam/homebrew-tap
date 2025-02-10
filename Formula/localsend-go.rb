@@ -1,7 +1,7 @@
 class LocalsendGo < Formula
   desc "CLI for localsend implemented in Go"
   homepage "https://github.com/meowrain/localsend-go"
-  version "1.2.1"
+  version "1.2.2"
 
   on_arm do
     url "https://github.com/meowrain/localsend-go/releases/download/v#{version}/localsend_cli-darwin-arm64"
