@@ -22,9 +22,9 @@ brew install timescam/tap/{formula}
 
 | Formula          | Version            | Description                                                                                                               |
 | ---------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| `pay-respects` | `0.6.13` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects |
+| `pay-respects`   | `0.6.13`           | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects |
 | `TheBoringNotch` | `jellyfin.snoring` | TheBoringNotch: Not so boring notch That Rocks 🎸🎶 <br />https://github.com/TheBoredTeam/boring.notch                    |
-| `localsend-go` | `null` | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                         |
+| `localsend-go`   | `1.2.2`            | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                         |
 | `imFile`         | `1.1.2`            | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                        |
 | `pokeget`        | `1.6.3`            | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                               |
 
