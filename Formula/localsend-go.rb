@@ -1,16 +1,16 @@
 class LocalsendGo < Formula
   desc "CLI for localsend implemented in Go"
   homepage "https://github.com/meowrain/localsend-go"
-  version "1.2.2"
+  version "1.2.3"
 
   on_arm do
     url "https://github.com/meowrain/localsend-go/releases/download/v#{version}/localsend_cli-darwin-arm64"
-    sha256 "bb4cd615e7b8ab72858a264544919f2231b45c9fb5a09fdb9c8ec45f39e56132"
+    sha256 "8c4b0e821beca23db50b8ab62a0f0be36e4ad5ddd0abb440eaf7f0f3afb53558"
   end
 
   on_intel do
     url "https://github.com/meowrain/localsend-go/releases/download/v#{version}/localsend_cli-darwin-amd64"
-    sha256 "d07c12de7268cde60bf13e9ad5346ba0611ed881a260ce48aeccb52d2dcd9fc8"
+    sha256 "86c60aafbe63558947ca67b33f9b8e677eef5f753822a02fd31a7c3899302b9f"
   end
 
   def install
