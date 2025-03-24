@@ -25,10 +25,18 @@ jobs:
         run: |
           RELEASE_INFO=$(curl -s "https://api.github.com/repos/talwat/pokeget-rs/releases/latest")
           VERSION=$(echo "$RELEASE_INFO" | jq -r .tag_name)
+          
+          # Check if the version is null or empty
+          if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
+            echo "Error: Invalid version detected. Aborting workflow." >&2
+            echo "version=" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Get SHA256 from release
-        if: steps.current.outputs.version != steps.fetch-release.outputs.version
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
         id: sha256
         run: |
           VERSION="${{ steps.fetch-release.outputs.version }}"
@@ -41,7 +49,7 @@ jobs:
           echo "x86_sha256=$X86_SHA256" >> $GITHUB_OUTPUT
 
       - name: Delete old branches
-        if: steps.current.outputs.version != steps.fetch-release.outputs.version
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
         run: |
           git branch -r | grep 'origin/pokeget-' | while read -r branch; do
             branch=${branch#origin/}
@@ -51,7 +59,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT }}
 
       - name: Update Formula and README
-        if: steps.current.outputs.version != steps.fetch-release.outputs.version
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
         run: |
           VERSION="${{ steps.fetch-release.outputs.version }}"
           ARM_SHA256="${{ steps.sha256.outputs.arm_sha256 }}"
@@ -70,7 +78,7 @@ jobs:
           sed -i "s/\`pokeget\`.*|\s*\`[0-9.]*\`\s*|/\`pokeget\` | \`${VERSION}\` |/" README.md
 
       - name: Create Pull Request
-        if: steps.current.outputs.version != steps.fetch-release.outputs.version
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
         id: cpr
         uses: peter-evans/create-pull-request@v5
         with:
@@ -87,7 +95,7 @@ jobs:
           delete-branch: true
 
       - name: Enable Auto-Merge
-        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.cpr.outputs.pull-request-number
+        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null' && steps.cpr.outputs.pull-request-number
         run: |
           # Wait for status checks to complete (max 2 minutes)
           for i in {1..24}; do
