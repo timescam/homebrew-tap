@@ -42,8 +42,8 @@ jobs:
           VERSION="${{ steps.fetch-release.outputs.version }}"
           
           # Get download URLs and calculate SHA256
-          ARM_URL="https://github.com/meowrain/localsend-go/releases/download/v${VERSION}/localsend_cli-darwin-arm64"
-          X86_URL="https://github.com/meowrain/localsend-go/releases/download/v${VERSION}/localsend_cli-darwin-amd64"
+          ARM_URL="https://github.com/meowrain/localsend-go/releases/download/v${VERSION}/localsend-go-darwin-arm64"
+          X86_URL="https://github.com/meowrain/localsend-go/releases/download/v${VERSION}/localsend-go-darwin-amd64"
           
           ARM_SHA256=$(curl -sL "$ARM_URL" | sha256sum | cut -d ' ' -f 1)
           X86_SHA256=$(curl -sL "$X86_URL" | sha256sum | cut -d ' ' -f 1)
