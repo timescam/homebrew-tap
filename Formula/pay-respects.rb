@@ -1,7 +1,7 @@
 class PayRespects < Formula
   desc "CLI tool to pay respects"
   homepage "https://github.com/iffse/pay-respects"
-  version "0.6.14"
+  version "0.7.0"
 
   on_arm do
     url "https://github.com/iffse/pay-respects/releases/download/v0.6.10/pay-respects-0.6.10-aarch64-apple-darwin.tar.zst"
