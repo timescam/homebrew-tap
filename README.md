@@ -22,7 +22,7 @@ brew install timescam/tap/{formula}
 
 | Formula          | Version         | Description                                                                                                               |
 | ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `pay-respects` | `0.7.1` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects |
+| `pay-respects` | `0.7.2` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects |
 | `TheBoringNotch` | `wolf.painting` | TheBoringNotch: Not so boring notch That Rocks 🎸🎶 <br />https://github.com/TheBoredTeam/boring.notch                    |
 | `localsend-go` | `1.2.7` | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                         |
 | `imFile`         | `1.1.2`         | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                        |
