@@ -72,16 +72,16 @@ jobs:
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/pay-respects.rb
           
           # Update ARM SHA256
-          sed -i "/if Hardware::CPU.arm?/,/else/ s/sha256 \".*\"/sha256 \"${ARM_SHA256}\"/" Formula/pay-respects.rb
+          sed -i "/on_arm do/,/end/ s/sha256 \".*\"/sha256 \"${ARM_SHA256}\"/" Formula/pay-respects.rb
           
           # Update x86 SHA256
-          sed -i "/else/,/end/ s/sha256 \".*\"/sha256 \"${X86_SHA256}\"/" Formula/pay-respects.rb
+          sed -i "/on_intel do/,/end/ s/sha256 \".*\"/sha256 \"${X86_SHA256}\"/" Formula/pay-respects.rb
           
           # Update ARM URL
-          sed -i "/if Hardware::CPU.arm?/,/else/ s|url \".*\"|url \"https://github.com/iffse/pay-respects/releases/download/v${VERSION}/pay-respects-${VERSION}-aarch64-apple-darwin.tar.zst\"|" Formula/pay-respects.rb
+          sed -i "/on_arm do/,/end/ s|url \".*\"|url \"https://github.com/iffse/pay-respects/releases/download/v${VERSION}/pay-respects-${VERSION}-aarch64-apple-darwin.tar.zst\"|" Formula/pay-respects.rb
           
           # Update x86 URL
-          sed -i "/else/,/end/ s|url \".*\"|url \"https://github.com/iffse/pay-respects/releases/download/v${VERSION}/pay-respects-${VERSION}-x86_64-apple-darwin.tar.zst\"|" Formula/pay-respects.rb
+          sed -i "/on_intel do/,/end/ s|url \".*\"|url \"https://github.com/iffse/pay-respects/releases/download/v${VERSION}/pay-respects-${VERSION}-x86_64-apple-darwin.tar.zst\"|" Formula/pay-respects.rb
           
           # Update README version
           sed -i "s/\`pay-respects\`.*|\s*\`[0-9.]*\`\s*|/\`pay-respects\` | \`${VERSION}\` |/" README.md
