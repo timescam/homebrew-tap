@@ -1,4 +1,4 @@
-name: Update imFile Cask
+name: imfile
 
 on:
   schedule:

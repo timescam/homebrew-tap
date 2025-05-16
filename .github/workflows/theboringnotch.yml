@@ -1,4 +1,4 @@
-name: Update TheBoringNotch Cask
+name: theboringnotch
 
 on:
   schedule:

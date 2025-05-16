@@ -35,9 +35,3 @@ brew install timescam/tap/{formula}
 | `peaclock`                     | `HEAD`  | A responsive and customizable clock, timer, and stopwatch for the terminal.<br />https://github.com/octobanana/peaclock                                          |
 | `evangelion-clock-screensaver` | `1.1.2` | A digital clock screensaver inspired by the graphical interfaces from Neon Genesis Evengelion.<br />https://github.com/Wandmalfarbe/evangelion-clock-screensaver |
 | `dvdts`                        | `HEAD`  | Terminal screensaver similar to dvd bouncing logo; Uses the distro/OS name/custom text instead<br />https://github.com/ameyrk99/dvdts                            |
-
-### Non-free software
-
-| Formula | Version                     | Description                                                                                                                  |
-| ------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `trae`  | `1.0.5431`<br />auto_update | Trae is an adaptive AI IDE that transforms how you work, collaborating with you to run faster.<br />https://www.trae.ai/home |
