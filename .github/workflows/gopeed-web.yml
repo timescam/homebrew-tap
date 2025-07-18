@@ -23,7 +23,7 @@ jobs:
       - name: Fetch latest version
         id: fetch-release
         run: |
-          RELEASE_INFO=$(curl -s "https://api.github.com/repos/GopeedLab/gopeed/releases")
+          RELEASE_INFO=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" "https://api.github.com/repos/GopeedLab/gopeed/releases")
           VERSION=$(echo "$RELEASE_INFO" | jq -r .[0].tag_name | sed 's/^v//')
           
           # Check if the version is null or empty
