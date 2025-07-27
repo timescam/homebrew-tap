@@ -1,6 +1,6 @@
 cask "theboringnotch" do
-  version "wolf.painting"
-  sha256 "1a58ec27e5de30faf107fdf8b77575b1c39ace69e77b1330fc4ed6562bf2badc"
+  version "v2.7-rc.0"
+  sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
 
   url "https://github.com/TheBoredTeam/boring.notch/releases/download/#{version}/#{version.split('.').map(&:capitalize).join}.dmg"
   name "TheBoringNotch"
