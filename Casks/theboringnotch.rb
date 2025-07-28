@@ -1,5 +1,5 @@
 cask "theboringnotch" do
-  version "v2.7-rc.0"
+  version "v2.7-rc.1"
   sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
 
   url "https://github.com/TheBoredTeam/boring.notch/releases/download/#{version}/#{version.split('.').map(&:capitalize).join}.dmg"
