@@ -20,7 +20,7 @@ jobs:
           CURRENT_VERSION=$(grep -m 1 'version' Casks/theboringnotch.rb | cut -d '"' -f 2)
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Fetch latest version
+      - name: Fetch latest version and download URL
         id: fetch-release
         run: |
           RELEASE_INFO=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" "https://api.github.com/repos/TheBoredTeam/boring.notch/releases")
@@ -30,23 +30,32 @@ jobs:
           if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
             echo "Error: Invalid version detected. Aborting workflow." >&2
             echo "version=" >> $GITHUB_OUTPUT
+            echo "download_url=" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          
+          # Extract the download URL for the DMG asset
+          DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.content_type == "application/x-apple-diskimage" or .content_type == "application/x-diskcopy" or (.name | test("\\.dmg$"))) | .browser_download_url' | head -n 1)
+          
+          # Check if download URL was found
+          if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
+            echo "Error: No DMG asset found in the latest release. Aborting workflow." >&2
+            echo "version=" >> $GITHUB_OUTPUT
+            echo "download_url=" >> $GITHUB_OUTPUT
             exit 1
           fi
           
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "download_url=$DOWNLOAD_URL" >> $GITHUB_OUTPUT
 
       - name: Download and calculate SHA256
         if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
         id: download
         run: |
-          VERSION="${{ steps.fetch-release.outputs.version }}"
+          DOWNLOAD_URL="${{ steps.fetch-release.outputs.download_url }}"
           
-          # Convert version to CamelCase for DMG filename
-          DMG_VERSION=$(echo "$VERSION" | awk -F'.' '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1' | tr -d ' ')
-          
-          # Get download URL and calculate SHA256
-          APP_URL="https://github.com/TheBoredTeam/boring.notch/releases/download/${VERSION}/${DMG_VERSION}.dmg"
-          APP_SHA256=$(curl -sL "$APP_URL" | sha256sum | cut -d ' ' -f 1)
+          # Calculate SHA256 from the download URL
+          APP_SHA256=$(curl -sL "$DOWNLOAD_URL" | sha256sum | cut -d ' ' -f 1)
           
           echo "sha256=$APP_SHA256" >> $GITHUB_OUTPUT
 
@@ -65,12 +74,16 @@ jobs:
         run: |
           VERSION="${{ steps.fetch-release.outputs.version }}"
           SHA256="${{ steps.download.outputs.sha256 }}"
+          DOWNLOAD_URL="${{ steps.fetch-release.outputs.download_url }}"
           
           # Update version in Cask
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Casks/theboringnotch.rb
           
           # Update sha256 in Cask
           sed -i "s/sha256 \".*\"/sha256 \"${SHA256}\"/" Casks/theboringnotch.rb
+          
+          # Update download URL in Cask (replace the entire url line)
+          sed -i "s|url \".*\"|url \"${DOWNLOAD_URL}\"|" Casks/theboringnotch.rb
           
           # Update README version
           sed -i "s/\`TheBoringNotch\`.*|\s*\`[^']*\`\s*|/\`TheBoringNotch\` | \`${VERSION}\` |/" README.md
@@ -88,6 +101,7 @@ jobs:
             
             - Updated version to ${{ steps.fetch-release.outputs.version }}
             - Updated SHA256 checksum
+            - Updated download URL to ${{ steps.fetch-release.outputs.download_url }}
             - Updated version in README.md
           branch: theboringnotch-${{ steps.fetch-release.outputs.version }}
           delete-branch: true
