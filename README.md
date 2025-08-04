@@ -20,14 +20,13 @@ brew install timescam/tap/{formula}
 
 ## Available Packages
 
-| Formula          | Version         | Description                                                                                                                    |
-| ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Formula        | Version | Description                                                                                                                    |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `pay-respects` | `0.7.8` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects      |
-| `TheBoringNotch` | `v2.7-rc.1` | TheBoringNotch: Not so boring notch That Rocks 🎸🎶 <br />https://github.com/TheBoredTeam/boring.notch                         |
-| `localsend-go`   | `1.2.7`         | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                              |
-| `imFile`         | `1.1.2`         | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                             |
-| `pokeget` | `1.6.5` | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                                    |
-| `gopeed-web` | `1.7.1` | A modern download manager that supports all platforms. Built with Golang and Flutter.<br />https://github.com/GopeedLab/gopeed |
+| `localsend-go` | `1.2.7` | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                              |
+| `imFile`       | `1.1.2` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                             |
+| `pokeget`      | `1.6.5` | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                                    |
+| `gopeed-web`   | `1.7.1` | A modern download manager that supports all platforms. Built with Golang and Flutter.<br />https://github.com/GopeedLab/gopeed |
 
 ### Not tracked by daily GitHub Actions
 
@@ -36,3 +35,9 @@ brew install timescam/tap/{formula}
 | `peaclock`                     | `HEAD`  | A responsive and customizable clock, timer, and stopwatch for the terminal.<br />https://github.com/octobanana/peaclock                                          |
 | `evangelion-clock-screensaver` | `1.1.2` | A digital clock screensaver inspired by the graphical interfaces from Neon Genesis Evengelion.<br />https://github.com/Wandmalfarbe/evangelion-clock-screensaver |
 | `dvdts`                        | `HEAD`  | Terminal screensaver similar to dvd bouncing logo; Uses the distro/OS name/custom text instead<br />https://github.com/ameyrk99/dvdts                            |
+
+### Deprecated
+
+| Formula          | Description                                                                                        |
+| ---------------- | -------------------------------------------------------------------------------------------------- |
+| `theboringnotch` | Use the official tap: `brew install --cask TheBoredTeam/boring-notch/boring-notch --no-quarantine` |
