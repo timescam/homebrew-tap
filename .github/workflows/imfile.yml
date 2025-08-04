@@ -20,7 +20,7 @@ jobs:
           CURRENT_VERSION=$(grep -m 1 'version' Casks/imfile.rb | cut -d '"' -f 2)
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Fetch latest version
+      - name: Fetch latest version and download URLs
         id: fetch-release
         run: |
           RELEASE_INFO=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" "https://api.github.com/repos/imfile-io/imfile-desktop/releases")
@@ -30,21 +30,38 @@ jobs:
           if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
             echo "Error: Invalid version detected. Aborting workflow." >&2
             echo "version=" >> $GITHUB_OUTPUT
+            echo "arm_url=" >> $GITHUB_OUTPUT
+            echo "intel_url=" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          
+          # Extract download URLs for ARM and Intel assets
+          # ARM64 asset: imFile-1.1.2-arm64.dmg
+          ARM_URL=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name | test("arm64\\.dmg$")) | .browser_download_url' | head -n 1)
+          # Intel asset: imFile-1.1.2.dmg (without arm64 suffix)
+          INTEL_URL=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name | test("^imFile.*\\.dmg$")) | select(.name | test("arm64") | not) | .browser_download_url' | head -n 1)
+          
+          # Check if download URLs were found
+          if [ -z "$ARM_URL" ] || [ "$ARM_URL" = "null" ] || [ -z "$INTEL_URL" ] || [ "$INTEL_URL" = "null" ]; then
+            echo "Error: Required assets not found in the latest release. Aborting workflow." >&2
+            echo "version=" >> $GITHUB_OUTPUT
+            echo "arm_url=" >> $GITHUB_OUTPUT
+            echo "intel_url=" >> $GITHUB_OUTPUT
             exit 1
           fi
           
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "arm_url=$ARM_URL" >> $GITHUB_OUTPUT
+          echo "intel_url=$INTEL_URL" >> $GITHUB_OUTPUT
 
       - name: Download and calculate SHA256
         if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
         id: download
         run: |
-          VERSION="${{ steps.fetch-release.outputs.version }}"
+          ARM_URL="${{ steps.fetch-release.outputs.arm_url }}"
+          INTEL_URL="${{ steps.fetch-release.outputs.intel_url }}"
           
-          # Get download URLs and calculate SHA256 for both architectures
-          ARM_URL="https://github.com/imfile-io/imfile-desktop/releases/download/v${VERSION}/imFile-${VERSION}-arm64.dmg"
-          INTEL_URL="https://github.com/imfile-io/imfile-desktop/releases/download/v${VERSION}/imFile-${VERSION}-x64.dmg"
-          
+          # Calculate SHA256 from the download URLs
           ARM_SHA256=$(curl -sL "$ARM_URL" | sha256sum | cut -d ' ' -f 1)
           INTEL_SHA256=$(curl -sL "$INTEL_URL" | sha256sum | cut -d ' ' -f 1)
           
@@ -67,15 +84,19 @@ jobs:
           VERSION="${{ steps.fetch-release.outputs.version }}"
           ARM_SHA256="${{ steps.download.outputs.arm_sha256 }}"
           INTEL_SHA256="${{ steps.download.outputs.intel_sha256 }}"
+          ARM_URL="${{ steps.fetch-release.outputs.arm_url }}"
+          INTEL_URL="${{ steps.fetch-release.outputs.intel_url }}"
           
           # Update version in Cask
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Casks/imfile.rb
           
           # Update ARM SHA256 and URL
           sed -i "/on arm/,/end/ s/sha256 \".*\"/sha256 \"${ARM_SHA256}\"/" Casks/imfile.rb
+          sed -i "/on arm/,/end/ s|url \".*\"|url \"${ARM_URL}\"|" Casks/imfile.rb
           
           # Update Intel SHA256 and URL
           sed -i "/on intel/,/end/ s/sha256 \".*\"/sha256 \"${INTEL_SHA256}\"/" Casks/imfile.rb
+          sed -i "/on intel/,/end/ s|url \".*\"|url \"${INTEL_URL}\"|" Casks/imfile.rb
           
           # Update README version
           sed -i "s/\`imFile\`.*|\s*\`[^']*\`\s*|/\`imFile\` | \`${VERSION}\` |/" README.md
@@ -93,6 +114,7 @@ jobs:
             
             - Updated version to ${{ steps.fetch-release.outputs.version }}
             - Updated SHA256 checksums for both ARM and Intel builds
+            - Updated download URLs to ${{ steps.fetch-release.outputs.arm_url }} and ${{ steps.fetch-release.outputs.intel_url }}
             - Updated version in README.md
           branch: imfile-${{ steps.fetch-release.outputs.version }}
           delete-branch: true
@@ -102,7 +124,7 @@ jobs:
         run: |
           # Wait for status checks to complete (max 2 minutes)
           for i in {1..24}; do
-            status=$(gh pr view "${{ steps.cpr.outputs.pull-request-number }}" --Json mergeable -q .mergeable)
+            status=$(gh pr view "${{ steps.cpr.outputs.pull-request-number }}" --json mergeable -q .mergeable)
             if [ "$status" = "MERGEABLE" ]; then
               gh pr merge --auto --merge "${{ steps.cpr.outputs.pull-request-number }}"
               break

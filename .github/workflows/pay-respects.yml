@@ -20,7 +20,7 @@ jobs:
           CURRENT_VERSION=$(grep -m 1 'version' Formula/pay-respects.rb | cut -d '"' -f 2)
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Fetch latest version
+      - name: Fetch latest version and download URLs
         id: fetch-release
         run: |
           RELEASE_INFO=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" "https://api.github.com/repos/iffse/pay-respects/releases")
@@ -30,21 +30,36 @@ jobs:
           if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
             echo "Error: Invalid version detected. Aborting workflow." >&2
             echo "version=" >> $GITHUB_OUTPUT
+            echo "arm_url=" >> $GITHUB_OUTPUT
+            echo "x86_url=" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          
+          # Extract download URLs for ARM and x86 assets
+          ARM_URL=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name | test("aarch64-apple-darwin\\.tar\\.zst$")) | .browser_download_url' | head -n 1)
+          X86_URL=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name | test("x86_64-apple-darwin\\.tar\\.zst$")) | .browser_download_url' | head -n 1)
+          
+          # Check if download URLs were found
+          if [ -z "$ARM_URL" ] || [ "$ARM_URL" = "null" ] || [ -z "$X86_URL" ] || [ "$X86_URL" = "null" ]; then
+            echo "Error: Required assets not found in the latest release. Aborting workflow." >&2
+            echo "version=" >> $GITHUB_OUTPUT
+            echo "arm_url=" >> $GITHUB_OUTPUT
+            echo "x86_url=" >> $GITHUB_OUTPUT
             exit 1
           fi
           
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "arm_url=$ARM_URL" >> $GITHUB_OUTPUT
+          echo "x86_url=$X86_URL" >> $GITHUB_OUTPUT
 
       - name: Download and calculate SHA256
         if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
         id: download
         run: |
-          VERSION="${{ steps.fetch-release.outputs.version }}"
+          ARM_URL="${{ steps.fetch-release.outputs.arm_url }}"
+          X86_URL="${{ steps.fetch-release.outputs.x86_url }}"
           
-          # Get download URLs and calculate SHA256
-          ARM_URL="https://github.com/iffse/pay-respects/releases/download/v${VERSION}/pay-respects-${VERSION}-aarch64-apple-darwin.tar.zst"
-          X86_URL="https://github.com/iffse/pay-respects/releases/download/v${VERSION}/pay-respects-${VERSION}-x86_64-apple-darwin.tar.zst"
-          
+          # Calculate SHA256 from the download URLs
           ARM_SHA256=$(curl -sL "$ARM_URL" | sha256sum | cut -d ' ' -f 1)
           X86_SHA256=$(curl -sL "$X86_URL" | sha256sum | cut -d ' ' -f 1)
           
@@ -67,6 +82,8 @@ jobs:
           VERSION="${{ steps.fetch-release.outputs.version }}"
           ARM_SHA256="${{ steps.download.outputs.arm_sha256 }}"
           X86_SHA256="${{ steps.download.outputs.x86_sha256 }}"
+          ARM_URL="${{ steps.fetch-release.outputs.arm_url }}"
+          X86_URL="${{ steps.fetch-release.outputs.x86_url }}"
           
           # Update version in Formula
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/pay-respects.rb
@@ -78,10 +95,10 @@ jobs:
           sed -i "/on_intel do/,/end/ s/sha256 \".*\"/sha256 \"${X86_SHA256}\"/" Formula/pay-respects.rb
           
           # Update ARM URL
-          sed -i "/on_arm do/,/end/ s|url \".*\"|url \"https://github.com/iffse/pay-respects/releases/download/v${VERSION}/pay-respects-${VERSION}-aarch64-apple-darwin.tar.zst\"|" Formula/pay-respects.rb
+          sed -i "/on_arm do/,/end/ s|url \".*\"|url \"${ARM_URL}\"|" Formula/pay-respects.rb
           
           # Update x86 URL
-          sed -i "/on_intel do/,/end/ s|url \".*\"|url \"https://github.com/iffse/pay-respects/releases/download/v${VERSION}/pay-respects-${VERSION}-x86_64-apple-darwin.tar.zst\"|" Formula/pay-respects.rb
+          sed -i "/on_intel do/,/end/ s|url \".*\"|url \"${X86_URL}\"|" Formula/pay-respects.rb
           
           # Update README version
           sed -i "s/\`pay-respects\`.*|\s*\`[0-9.]*\`\s*|/\`pay-respects\` | \`${VERSION}\` |/" README.md
@@ -99,6 +116,7 @@ jobs:
             
             - Updated version to ${{ steps.fetch-release.outputs.version }}
             - Updated SHA256 checksums for both ARM and x86_64 builds
+            - Updated download URLs to ${{ steps.fetch-release.outputs.arm_url }} and ${{ steps.fetch-release.outputs.x86_url }}
             - Updated version in README.md
           branch: pay-respects-${{ steps.fetch-release.outputs.version }}
           delete-branch: true
