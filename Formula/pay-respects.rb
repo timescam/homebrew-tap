@@ -1,16 +1,16 @@
 class PayRespects < Formula
   desc "CLI tool to pay respects"
   homepage "https://github.com/iffse/pay-respects"
-  version "0.7.8"
+  version "0.7.9"
 
   on_arm do
-    url "https://github.com/iffse/pay-respects/releases/download/v0.7.8/pay-respects-0.7.8-aarch64-apple-darwin.tar.zst"
-    sha256 "3d17d08b9a3a1f045952ea9d6034c8519786775db2a8c3b948a5657878aab239"
+    url "https://github.com/iffse/pay-respects/releases/download/v0.7.9/pay-respects-0.7.9-aarch64-apple-darwin.tar.zst"
+    sha256 "20c1539e30baf09585cdd0fd71e3f8e428f01004e91aa6df635c9d0c360ea895"
   end
 
   on_intel do
-    url "https://github.com/iffse/pay-respects/releases/download/v0.7.8/pay-respects-0.7.8-x86_64-apple-darwin.tar.zst"
-    sha256 "179dcf08610de9e4d18bad6dc930886b6fe01371108c25a02a273ce6f11aa312"
+    url "https://github.com/iffse/pay-respects/releases/download/v0.7.9/pay-respects-0.7.9-x86_64-apple-darwin.tar.zst"
+    sha256 "7044b984bbf31698cd07065d70cf1f7adc30e5501a157dae9d7f80ff8d7310fc"
   end
 
   def install
