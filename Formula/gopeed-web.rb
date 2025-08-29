@@ -5,12 +5,12 @@ class GopeedWeb < Formula
   
   on_arm do
     url "https://github.com/GopeedLab/gopeed/releases/download/v1.8.0/gopeed-web-v1.8.0-macos-arm64.zip"
-    sha256 "fab217a326cbfac9639150d8c7ab3e8f88326f5fd838630f716ee7ab7944393f"
+    sha256 "e3c5bb23a572cef45bfcffa7ce33a923cf2524a8d9b137ddac2842a7d599120b"
   end
   
   on_intel do
     url "https://github.com/GopeedLab/gopeed/releases/download/v1.8.0/gopeed-web-v1.8.0-macos-amd64.zip"
-    sha256 "32f0461a3418443db3832910cf0370230a315b398a866574bbef68413f1305c0"
+    sha256 "d44a3d8f75f7a156b61fda30ac4f68c75e700a30e3902a00078c05c27d7684ba"
   end
   
   def install
