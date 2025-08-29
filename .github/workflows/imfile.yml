@@ -55,7 +55,7 @@ jobs:
           echo "intel_url=$INTEL_URL" >> $GITHUB_OUTPUT
 
       - name: Download and calculate SHA256
-        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
+        if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
         id: download
         run: |
           ARM_URL="${{ steps.fetch-release.outputs.arm_url }}"
@@ -69,7 +69,7 @@ jobs:
           echo "intel_sha256=$INTEL_SHA256" >> $GITHUB_OUTPUT
 
       - name: Delete old branches
-        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
+        if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
         run: |
           git branch -r | grep 'origin/imfile-' | while read -r branch; do
             branch=${branch#origin/}
@@ -79,7 +79,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT }}
 
       - name: Update Cask and README
-        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
+        if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
         run: |
           VERSION="${{ steps.fetch-release.outputs.version }}"
           ARM_SHA256="${{ steps.download.outputs.arm_sha256 }}"
@@ -102,7 +102,7 @@ jobs:
           sed -i "s/\`imFile\`.*|\s*\`[^']*\`\s*|/\`imFile\` | \`${VERSION}\` |/" README.md
 
       - name: Create Pull Request
-        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null'
+        if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
         id: cpr
         uses: peter-evans/create-pull-request@v5
         with:
@@ -120,7 +120,7 @@ jobs:
           delete-branch: true
 
       - name: Enable Auto-Merge
-        if: steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null' && steps.cpr.outputs.pull-request-number
+        if: ((steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch') && steps.cpr.outputs.pull-request-number
         run: |
           # Wait for status checks to complete (max 2 minutes)
           for i in {1..24}; do
