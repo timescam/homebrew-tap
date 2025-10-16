@@ -1,0 +1,78 @@
+name: audacity-build-nightly
+
+on:
+  schedule:
+    - cron: '0 19 * * *'  # Runs daily
+  workflow_dispatch:      # Allows manual trigger
+
+jobs:
+  build-audacity:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          brew install qt@6
+
+      - name: Clone Audacity source
+        run: |
+          git clone --recurse-submodules https://github.com/audacity/audacity.git audacity-source
+
+      - name: Build Audacity
+        working-directory: audacity-source
+        run: |
+          cmake -S . -B build -DCMAKE_INSTALL_PREFIX=output -DCMAKE_OSX_ARCHITECTURES=arm64
+          mkdir -p output
+          cmake --build build
+          cmake --install build
+
+      - name: Find and prepare app bundle
+        id: prepare-app
+        run: |
+          APP_PATH=$(find audacity-source/output -name "*.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "Error: No .app bundle found in output directory"
+            exit 1
+          fi
+
+          APP_NAME=$(basename "$APP_PATH")
+          echo "Found app: $APP_NAME at $APP_PATH"
+
+          # Create a temporary directory for DMG creation
+          TEMP_DIR=$(mktemp -d)
+          cp -r "$APP_PATH" "$TEMP_DIR/"
+
+          # Create DMG file
+          DMG_NAME="audacity-macOS-nightly-arm64.dmg"
+          hdiutil create -volname "Audacity Nightly" -srcfolder "$TEMP_DIR" -ov -format UDZO "$DMG_NAME"
+
+          # Clean up temporary directory
+          rm -rf "$TEMP_DIR"
+
+          echo "app_path=${APP_PATH}" >> $GITHUB_OUTPUT
+          echo "app_name=${APP_NAME}" >> $GITHUB_OUTPUT
+          echo "archive_name=${DMG_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: audacity-nightly
+          name: Audacity Nightly Build ${{ steps.date.outputs.date }}
+          body: |
+            Automated nightly build of Audacity from master branch.
+
+            Built on: ${{ steps.date.outputs.date }}
+            Architecture: ARM64 (Apple Silicon)
+
+            This is an automated build from the latest master branch. Use at your own risk.
+          draft: false
+          prerelease: true
+          files: ./${{ steps.prepare-app.outputs.archive_name }}
