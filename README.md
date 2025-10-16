@@ -26,15 +26,16 @@ brew install timescam/tap/{formula}
 | `localsend-go` | `1.2.7` | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                              |
 | `imFile`       | `1.1.2` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                             |
 | `pokeget`      | `1.6.5` | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                                    |
-| `gopeed-web` | `1.8.2` | A modern download manager that supports all platforms. Built with Golang and Flutter.<br />https://github.com/GopeedLab/gopeed |
+| `gopeed-web`   | `1.8.2` | A modern download manager that supports all platforms. Built with Golang and Flutter.<br />https://github.com/GopeedLab/gopeed |
 
 ### Not tracked by daily GitHub Actions
 
-| Formula                        | Version | Description                                                                                                                                                      |
-| ------------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `peaclock`                     | `HEAD`  | A responsive and customizable clock, timer, and stopwatch for the terminal.<br />https://github.com/octobanana/peaclock                                          |
-| `evangelion-clock-screensaver` | `1.1.2` | A digital clock screensaver inspired by the graphical interfaces from Neon Genesis Evengelion.<br />https://github.com/Wandmalfarbe/evangelion-clock-screensaver |
-| `dvdts`                        | `HEAD`  | Terminal screensaver similar to dvd bouncing logo; Uses the distro/OS name/custom text instead<br />https://github.com/ameyrk99/dvdts                            |
+| Formula                        | Version   | Description                                                                                                                                                      |
+| ------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `peaclock`                     | `HEAD`    | A responsive and customizable clock, timer, and stopwatch for the terminal.<br />https://github.com/octobanana/peaclock                                          |
+| `evangelion-clock-screensaver` | `1.1.2`   | A digital clock screensaver inspired by the graphical interfaces from Neon Genesis Evengelion.<br />https://github.com/Wandmalfarbe/evangelion-clock-screensaver |
+| `dvdts`                        | `HEAD`    | Terminal screensaver similar to dvd bouncing logo; Uses the distro/OS name/custom text instead<br />https://github.com/ameyrk99/dvdts                            |
+| `audacity@nightly`             | `nightly` | Audacity nightly automated builds<br />https://www.audacityteam.org/beta/                                                                                              |
 
 ### Deprecated
 
