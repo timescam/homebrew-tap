@@ -1,16 +1,16 @@
 class Pokeget < Formula
   desc "A command line utility to display pokemon sprites in the terminal"
   homepage "https://github.com/talwat/pokeget-rs"
-  version "1.6.5"
+  version "1.6.7"
 
   on_arm do
     url "https://github.com/talwat/pokeget-rs/releases/download/#{version}/pokeget-macOS-aarch64.tar.gz"
-    sha256 "2e524bde1df6f73f3130add15f25d3bcf67083a2f2609b3d8b686ef9be65fa5d"
+    sha256 "0bf716d188e1d226778568ddd6d9f832a124db4490f0da256d53788634f2e544"
   end
 
   on_intel do
     url "https://github.com/talwat/pokeget-rs/releases/download/#{version}/pokeget-macOS-x86_64.tar.gz"
-    sha256 "ae2b903ec4e452f1eea953646bfe4aee2e05d6078150f2a292d58bb40b075feb"
+    sha256 "f5813f93d131c9d04bc4326dc35198e63fe9b631d024c883d140d00920ddd9d7"
   end
 
   def install
