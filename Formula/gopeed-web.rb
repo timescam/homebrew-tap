@@ -1,16 +1,16 @@
 class GopeedWeb < Formula
   desc "A modern download manager that supports all platforms. Built with Golang and Flutter."
   homepage "https://github.com/GopeedLab/gopeed"
-  version "1.8.2"
+  version "1.8.3"
   
   on_arm do
-    url "https://github.com/GopeedLab/gopeed/releases/download/v1.8.2/gopeed-web-v1.8.2-macos-arm64.zip"
-    sha256 "32fb76c260bfbd5782a265b645a2830cd0647e3b172ac83895796a04e362dae6"
+    url "https://github.com/GopeedLab/gopeed/releases/download/v1.8.3/gopeed-web-v1.8.3-macos-arm64.zip"
+    sha256 "9904787bb90461b8576342f71e2b5cf3840917c23e46856fa26f3bad23b2f699"
   end
   
   on_intel do
-    url "https://github.com/GopeedLab/gopeed/releases/download/v1.8.2/gopeed-web-v1.8.2-macos-amd64.zip"
-    sha256 "254d0752fd8b134f01c3c5c698f32a63249c110065b2009bce123b8221c3bab0"
+    url "https://github.com/GopeedLab/gopeed/releases/download/v1.8.3/gopeed-web-v1.8.3-macos-amd64.zip"
+    sha256 "1a2b42fbcdf2bca6374ccd1e73c2414a94dcc6299b9f74a75ece6063f5e7b57b"
   end
   
   def install
