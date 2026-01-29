@@ -17,7 +17,7 @@ jobs:
       - name: Get current version
         id: current
         run: |
-          CURRENT_VERSION=$(grep -m 1 'version' Formula/pokeget.rb | cut -d '"' -f 2)
+          CURRENT_VERSION=$(grep -m 1 'version' Formula/pokeget.rb | cut -d '"' -f 2 | tr -d '\n\r' | xargs)
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
       - name: Fetch latest version
@@ -33,18 +33,10 @@ jobs:
             exit 1
           fi
           
+          ARM_SHA256=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name == "pokeget-macOS-aarch64.tar.gz") | .digest | sub("sha256:"; "")')
+          X86_SHA256=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name == "pokeget-macOS-x86_64.tar.gz") | .digest | sub("sha256:"; "")')
+          VERSION=$(echo "$VERSION" | tr -d '\n\r' | xargs)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Get SHA256 from release
-        if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
-        id: sha256
-        run: |
-          VERSION="${{ steps.fetch-release.outputs.version }}"
-          
-          # Get SHA256 files from release
-          ARM_SHA256=$(curl -sL "https://github.com/talwat/pokeget-rs/releases/download/${VERSION}/pokeget-macOS-aarch64.tar.gz.sha256" | cut -d ' ' -f 1)
-          X86_SHA256=$(curl -sL "https://github.com/talwat/pokeget-rs/releases/download/${VERSION}/pokeget-macOS-x86_64.tar.gz.sha256" | cut -d ' ' -f 1)
-          
           echo "arm_sha256=$ARM_SHA256" >> $GITHUB_OUTPUT
           echo "x86_sha256=$X86_SHA256" >> $GITHUB_OUTPUT
 
@@ -62,8 +54,8 @@ jobs:
         if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
         run: |
           VERSION="${{ steps.fetch-release.outputs.version }}"
-          ARM_SHA256="${{ steps.sha256.outputs.arm_sha256 }}"
-          X86_SHA256="${{ steps.sha256.outputs.x86_sha256 }}"
+          ARM_SHA256="${{ steps.fetch-release.outputs.arm_sha256 }}"
+          X86_SHA256="${{ steps.fetch-release.outputs.x86_sha256 }}"
           
           # Update version in Formula
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/pokeget.rb

@@ -17,7 +17,7 @@ jobs:
       - name: Get current version
         id: current
         run: |
-          CURRENT_VERSION=$(grep -m 1 'version' Formula/pay-respects.rb | cut -d '"' -f 2)
+          CURRENT_VERSION=$(grep -m 1 'version' Formula/pay-respects.rb | cut -d '"' -f 2 | tr -d '\n\r' | xargs)
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
       - name: Fetch latest version and download URLs
@@ -48,21 +48,12 @@ jobs:
             exit 1
           fi
           
+          ARM_SHA256=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name | test("aarch64-apple-darwin\\.tar\\.zst$")) | .digest | sub("sha256:"; "")')
+          X86_SHA256=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name | test("x86_64-apple-darwin\\.tar\\.zst$")) | .digest | sub("sha256:"; "")')
+          VERSION=$(echo "$VERSION" | tr -d '\n\r' | xargs)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "arm_url=$ARM_URL" >> $GITHUB_OUTPUT
           echo "x86_url=$X86_URL" >> $GITHUB_OUTPUT
-
-      - name: Download and calculate SHA256
-        if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
-        id: download
-        run: |
-          ARM_URL="${{ steps.fetch-release.outputs.arm_url }}"
-          X86_URL="${{ steps.fetch-release.outputs.x86_url }}"
-          
-          # Calculate SHA256 from the download URLs
-          ARM_SHA256=$(curl -sL "$ARM_URL" | sha256sum | cut -d ' ' -f 1)
-          X86_SHA256=$(curl -sL "$X86_URL" | sha256sum | cut -d ' ' -f 1)
-          
           echo "arm_sha256=$ARM_SHA256" >> $GITHUB_OUTPUT
           echo "x86_sha256=$X86_SHA256" >> $GITHUB_OUTPUT
 
@@ -80,8 +71,8 @@ jobs:
         if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
         run: |
           VERSION="${{ steps.fetch-release.outputs.version }}"
-          ARM_SHA256="${{ steps.download.outputs.arm_sha256 }}"
-          X86_SHA256="${{ steps.download.outputs.x86_sha256 }}"
+          ARM_SHA256="${{ steps.fetch-release.outputs.arm_sha256 }}"
+          X86_SHA256="${{ steps.fetch-release.outputs.x86_sha256 }}"
           ARM_URL="${{ steps.fetch-release.outputs.arm_url }}"
           X86_URL="${{ steps.fetch-release.outputs.x86_url }}"
           

@@ -17,7 +17,7 @@ jobs:
       - name: Get current version
         id: current
         run: |
-          CURRENT_VERSION=$(grep -m 1 'version' Formula/zagi.rb | cut -d '"' -f 2)
+          CURRENT_VERSION=$(grep -m 1 'version' Formula/zagi.rb | cut -d '"' -f 2 | tr -d '\n\r' | xargs)
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
       - name: Fetch latest version
@@ -33,6 +33,7 @@ jobs:
           fi
           ARM_SHA256=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name == "zagi-macos-aarch64.tar.gz") | .digest | sub("sha256:"; "")')
           X86_SHA256=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name == "zagi-macos-x86_64.tar.gz") | .digest | sub("sha256:"; "")')
+          VERSION=$(echo "$VERSION" | tr -d '\n\r' | xargs)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "arm_sha256=$ARM_SHA256" >> $GITHUB_OUTPUT

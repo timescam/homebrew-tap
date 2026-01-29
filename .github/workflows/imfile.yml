@@ -17,7 +17,7 @@ jobs:
       - name: Get current version
         id: current
         run: |
-          CURRENT_VERSION=$(grep -m 1 'version' Casks/imfile.rb | cut -d '"' -f 2)
+          CURRENT_VERSION=$(grep -m 1 'version' Casks/imfile.rb | cut -d '"' -f 2 | tr -d '\n\r' | xargs)
           echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
       - name: Fetch latest version and download URLs
@@ -50,6 +50,7 @@ jobs:
             exit 1
           fi
           
+          VERSION=$(echo "$VERSION" | tr -d '\n\r' | xargs)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "arm_url=$ARM_URL" >> $GITHUB_OUTPUT
           echo "intel_url=$INTEL_URL" >> $GITHUB_OUTPUT
