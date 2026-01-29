@@ -35,9 +35,11 @@ jobs:
             exit 1
           fi
           
-          # Extract download URLs for ARM and x86 ZIP assets
+          # Extract download URLs and SHA256 digests for ARM and x86 ZIP assets
           ARM_URL=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name | test("gopeed-web.*macos-arm64\\.zip$")) | .browser_download_url' | head -n 1)
           X86_URL=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name | test("gopeed-web.*macos-amd64\\.zip$")) | .browser_download_url' | head -n 1)
+          ARM_SHA256=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name | test("gopeed-web.*macos-arm64\\.zip$")) | .digest | sub("sha256:"; "")' | head -n 1)
+          X86_SHA256=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name | test("gopeed-web.*macos-amd64\\.zip$")) | .digest | sub("sha256:"; "")' | head -n 1)
           
           # Check if download URLs were found
           if [ -z "$ARM_URL" ] || [ "$ARM_URL" = "null" ] || [ -z "$X86_URL" ] || [ "$X86_URL" = "null" ]; then
@@ -51,18 +53,6 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "arm_url=$ARM_URL" >> $GITHUB_OUTPUT
           echo "x86_url=$X86_URL" >> $GITHUB_OUTPUT
-
-      - name: Download and calculate SHA256
-        if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
-        id: download
-        run: |
-          ARM_URL="${{ steps.fetch-release.outputs.arm_url }}"
-          X86_URL="${{ steps.fetch-release.outputs.x86_url }}"
-          
-          # Calculate SHA256 from the download URLs
-          ARM_SHA256=$(curl -sL "$ARM_URL" | sha256sum | cut -d ' ' -f 1)
-          X86_SHA256=$(curl -sL "$X86_URL" | sha256sum | cut -d ' ' -f 1)
-          
           echo "arm_sha256=$ARM_SHA256" >> $GITHUB_OUTPUT
           echo "x86_sha256=$X86_SHA256" >> $GITHUB_OUTPUT
 
@@ -80,8 +70,8 @@ jobs:
         if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
         run: |
           VERSION="${{ steps.fetch-release.outputs.version }}"
-          ARM_SHA256="${{ steps.download.outputs.arm_sha256 }}"
-          X86_SHA256="${{ steps.download.outputs.x86_sha256 }}"
+          ARM_SHA256="${{ steps.fetch-release.outputs.arm_sha256 }}"
+          X86_SHA256="${{ steps.fetch-release.outputs.x86_sha256 }}"
           ARM_URL="${{ steps.fetch-release.outputs.arm_url }}"
           X86_URL="${{ steps.fetch-release.outputs.x86_url }}"
           
