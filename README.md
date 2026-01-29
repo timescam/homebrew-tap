@@ -26,6 +26,7 @@ brew install timescam/tap/{formula}
 | `localsend-go` | `1.2.7` | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                              |
 | `imFile`       | `1.1.2` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                             |
 | `pokeget` | `1.6.7` | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                                    |
+| `zagi` | `0.1.7` | A better git for agents.<br />https://github.com/mattzcarey/zagi                                                             |
 | `gopeed-web` | `1.9.0` | A modern download manager that supports all platforms. Built with Golang and Flutter.<br />https://github.com/GopeedLab/gopeed |
 
 ### Not tracked by daily GitHub Actions
