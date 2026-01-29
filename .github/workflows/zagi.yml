@@ -1,0 +1,93 @@
+name: zagi
+
+on:
+  schedule:
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+          fetch-depth: 0
+
+      - name: Get current version
+        id: current
+        run: |
+          CURRENT_VERSION=$(grep -m 1 'version' Formula/zagi.rb | cut -d '"' -f 2)
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Fetch latest version
+        id: fetch-release
+        run: |
+          RELEASE_INFO=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" "https://api.github.com/repos/mattzcarey/zagi/releases")
+          TAG=$(echo "$RELEASE_INFO" | jq -r .[0].tag_name)
+          VERSION=$(echo "$TAG" | sed 's/^v//')
+          if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
+            echo "Error: Invalid version detected. Aborting workflow." >&2
+            echo "version=" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          ARM_SHA256=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name == "zagi-macos-aarch64.tar.gz") | .digest | sub("sha256:"; "")')
+          X86_SHA256=$(echo "$RELEASE_INFO" | jq -r '.[0].assets[] | select(.name == "zagi-macos-x86_64.tar.gz") | .digest | sub("sha256:"; "")')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "arm_sha256=$ARM_SHA256" >> $GITHUB_OUTPUT
+          echo "x86_sha256=$X86_SHA256" >> $GITHUB_OUTPUT
+
+      - name: Delete old branches
+        if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
+        run: |
+          git branch -r | grep 'origin/zagi-' | while read -r branch; do
+            branch=${branch#origin/}
+            git push origin --delete "$branch"
+          done
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
+
+      - name: Update Formula and README
+        if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
+        run: |
+          VERSION="${{ steps.fetch-release.outputs.version }}"
+          TAG="${{ steps.fetch-release.outputs.tag }}"
+          ARM_SHA256="${{ steps.fetch-release.outputs.arm_sha256 }}"
+          X86_SHA256="${{ steps.fetch-release.outputs.x86_sha256 }}"
+          sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/zagi.rb
+          sed -i "/on_arm do/,/end/ s|url \".*\"|url \"https://github.com/mattzcarey/zagi/releases/download/${TAG}/zagi-macos-aarch64.tar.gz\"|" Formula/zagi.rb
+          sed -i "/on_arm do/,/end/ s/sha256 \".*\"/sha256 \"${ARM_SHA256}\"/" Formula/zagi.rb
+          sed -i "/on_intel do/,/end/ s|url \".*\"|url \"https://github.com/mattzcarey/zagi/releases/download/${TAG}/zagi-macos-x86_64.tar.gz\"|" Formula/zagi.rb
+          sed -i "/on_intel do/,/end/ s/sha256 \".*\"/sha256 \"${X86_SHA256}\"/" Formula/zagi.rb
+          sed -i "s/\`zagi\`.*|\s*\`[0-9.]*\`\s*|/\`zagi\` | \`${VERSION}\` |/" README.md
+
+      - name: Create Pull Request
+        if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PAT }}
+          commit-message: "chore: update zagi to version ${{ steps.fetch-release.outputs.version }}"
+          title: "Update zagi to version ${{ steps.fetch-release.outputs.version }}"
+          body: |
+            Automated update of zagi to version ${{ steps.fetch-release.outputs.version }}
+            - Updated version to ${{ steps.fetch-release.outputs.version }}
+            - Updated SHA256 checksums for both ARM and x86_64 builds
+            - Updated version in README.md
+          branch: zagi-${{ steps.fetch-release.outputs.version }}
+          delete-branch: true
+
+      - name: Enable Auto-Merge
+        if: ((steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch') && steps.cpr.outputs.pull-request-number
+        run: |
+          for i in {1..24}; do
+            status=$(gh pr view "${{ steps.cpr.outputs.pull-request-number }}" --json mergeable -q .mergeable)
+            if [ "$status" = "MERGEABLE" ]; then
+              gh pr merge --auto --merge "${{ steps.cpr.outputs.pull-request-number }}"
+              break
+            fi
+            sleep 5
+          done
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
