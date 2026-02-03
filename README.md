@@ -28,7 +28,7 @@ brew install timescam/tap/{formula}
 | `pokeget`      | `1.6.7`  | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                                                       |
 | `zagi`         | `0.1.7`  | A better git for z.<br />https://github.com/mattzcarey/zagi                                                                                       |
 | `gopeed-web`   | `1.9.0`  | A modern download manager that supports all platforms. Built with Golang and Flutter.<br />https://github.com/GopeedLab/gopeed                    |
-| `spotatui`     | `0.35.5` | A fully standalone Spotify client for the terminal. Native streaming included, no daemon required.<br />https://github.com/LargeModGames/spotatui |
+| `spotatui` | `0.35.5` | A fully standalone Spotify client for the terminal. Native streaming included, no daemon required.<br />https://github.com/LargeModGames/spotatui |
 
 ### Not tracked by daily GitHub Actions
 
