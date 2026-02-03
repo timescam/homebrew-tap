@@ -22,7 +22,7 @@ brew install timescam/tap/{formula}
 
 | Formula        | Version  | Description                                                                                                                                       |
 | -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pay-respects` | `0.7.9`  | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects                         |
+| `pay-respects` | `0.7.9` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects                         |
 | `localsend-go` | `1.2.7` | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                                                 |
 | `imFile` | `1.1.2` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                                                |
 | `pokeget`      | `1.6.7`  | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                                                       |
