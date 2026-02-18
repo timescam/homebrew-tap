@@ -1,16 +1,16 @@
 class Zagi < Formula
   desc "A better git for agents"
   homepage "https://github.com/mattzcarey/zagi"
-  version "0.1.7"
+  version "0.1.8"
 
   on_arm do
     url "https://github.com/mattzcarey/zagi/releases/download/v#{version}/zagi-macos-aarch64.tar.gz"
-    sha256 "a38e24624d4970cc038df861715e212c4e4fc18339b7b909c29257a4ebaa81d8"
+    sha256 "81c7e26d3a54a057520ede0f74fc3dd0e1e8895d5dcbb314f6ab95b530396efd"
   end
 
   on_intel do
     url "https://github.com/mattzcarey/zagi/releases/download/v#{version}/zagi-macos-x86_64.tar.gz"
-    sha256 "674cede2084627089c865fe735010d3d3a1ecce9002c267e4f43158d6e7d0bd1"
+    sha256 "22cc2fb88be1de9e75a73d529df61986843dfb4b82e458a4977fd8dc4f71ef4a"
   end
 
   def install
