@@ -30,6 +30,18 @@ jobs:
           cmake --build build
           cmake --install build
 
+      - name: Bundle Qt frameworks with macdeployqt
+        working-directory: audacity-source
+        run: |
+          QT_PREFIX=$(brew --prefix qt@6)
+          APP_PATH=$(find output -name "*.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "Error: No .app bundle found in output directory for macdeployqt"
+            exit 1
+          fi
+
+          "$QT_PREFIX/bin/macdeployqt" "$APP_PATH" -qmldir=. -always-overwrite
+
       - name: Find and prepare app bundle
         id: prepare-app
         run: |
@@ -44,7 +56,7 @@ jobs:
 
           # Create a temporary directory for DMG creation
           TEMP_DIR=$(mktemp -d)
-          cp -r "$APP_PATH" "$TEMP_DIR/"
+          ditto "$APP_PATH" "$TEMP_DIR/$APP_NAME"
 
           # Create DMG file
           DMG_NAME="audacity-macOS-nightly-arm64.dmg"
