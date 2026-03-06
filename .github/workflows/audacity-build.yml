@@ -42,6 +42,16 @@ jobs:
 
           "$QT_PREFIX/bin/macdeployqt" "$APP_PATH" -qmldir=. -always-overwrite
 
+      - name: Re-sign app bundle
+        working-directory: audacity-source
+        run: |
+          APP_PATH=$(find output -name "*.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "Error: No .app bundle found for re-signing"
+            exit 1
+          fi
+          codesign --force --deep --sign - "$APP_PATH"
+
       - name: Find and prepare app bundle
         id: prepare-app
         run: |
