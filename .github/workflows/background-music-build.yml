@@ -1,0 +1,79 @@
+name: background-music-build-nightly
+
+on:
+  schedule:
+    - cron: '0 19 * * *'  # Runs daily
+  workflow_dispatch:      # Allows manual trigger
+
+jobs:
+  build-background-music:
+    runs-on: macos-latest
+    env:
+      TERM: xterm-256color
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Clone Background Music source
+        run: |
+          git clone https://github.com/kyleneideck/BackgroundMusic.git background-music-source
+
+      - name: Build Background Music
+        working-directory: background-music-source
+        run: |
+          /bin/bash package.sh
+
+      - name: Re-sign and repackage
+        working-directory: background-music-source
+        run: |
+          PKG_PATH=$(find . -name "*.unsigned.pkg" -type f | head -n 1)
+          if [ -z "$PKG_PATH" ]; then
+            echo "Error: No .unsigned.pkg found in build output"
+            exit 1
+          fi
+
+          EXPANDED_BASE=$(mktemp -d)
+          EXPANDED_DIR="$EXPANDED_BASE/expanded"
+          pkgutil --expand-full "$PKG_PATH" "$EXPANDED_DIR"
+
+          codesign --force --deep --sign - "$EXPANDED_DIR/Installer.pkg/Payload/Applications/Background Music.app"
+          codesign --force --deep --sign - "$EXPANDED_DIR/Installer.pkg/Payload/Library/Audio/Plug-Ins/HAL/Background Music Device.driver"
+          codesign --force --deep --sign - "$EXPANDED_DIR/Installer.pkg/Scripts/BGMXPCHelper.xpc"
+
+          bash package.sh -r "$(realpath "$EXPANDED_DIR")"
+          rm -rf "$EXPANDED_BASE"
+
+      - name: Find and prepare pkg artifact
+        id: prepare-pkg
+        run: |
+          PKG_PATH=$(find background-music-source -name "*.repackaged.pkg" -type f | head -n 1)
+          if [ -z "$PKG_PATH" ]; then
+            echo "Error: No .repackaged.pkg found in build output"
+            exit 1
+          fi
+
+          ARCHIVE_NAME="background-music-macOS-nightly-arm64.pkg"
+          cp "$PKG_PATH" "$ARCHIVE_NAME"
+          echo "archive_name=${ARCHIVE_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: background-music-nightly
+          name: Background Music Nightly Build ${{ steps.date.outputs.date }}
+          body: |
+            Automated nightly build of Background Music from master branch.
+
+            Built on: ${{ steps.date.outputs.date }}
+            Architecture: ARM64 (Apple Silicon)
+
+            This is an automated build from the latest master branch. Use at your own risk.
+          draft: false
+          prerelease: true
+          files: ./${{ steps.prepare-pkg.outputs.archive_name }}
