@@ -6,6 +6,7 @@ cask "audacity@nightly" do
   name "Audacity"
   desc "Audio editor"
   homepage "https://www.audacityteam.org/beta/"
+  conflicts_with cask: "audacity"
 
   app "Audacity.app"
 
