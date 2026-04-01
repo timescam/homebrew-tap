@@ -25,7 +25,7 @@ brew install timescam/tap/{formula}
 | `atoll`        | ``          | Dynamic Island utility<br />https://github.com/Ebullioscopic/Atoll                                                                               |
 | `pay-respects` | `0.7.12`         | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects                         |
 | `localsend-go` | `1.2.7`          | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                                                 |
-| `imFile`       | `1.1.2`          | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                                                |
+| `imFile` | `imFile-1.2.0` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                                                |
 | `pokeget`      | `1.6.7`          | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                                                       |
 | `zagi`         | `0.1.8`          | A better git for z.<br />https://github.com/mattzcarey/zagi                                                                                       |
 | `gopeed-web` | `1.9.3` | A modern download manager that supports all platforms. Built with Golang and Flutter.<br />https://github.com/GopeedLab/gopeed                    |
