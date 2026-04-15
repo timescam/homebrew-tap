@@ -4,11 +4,19 @@ cask "background-music@nightly" do
 
   url "https://github.com/timescam/homebrew-tap/releases/download/background-music-nightly/background-music-macOS-nightly-arm64.pkg"
   name "Background Music"
-  desc "macOS audio utility: auto-pause music, per-app volume, record system audio"
+  desc "Audio utility: auto-pause music, per-app volume, record system audio"
   homepage "https://github.com/kyleneideck/BackgroundMusic"
+
   conflicts_with cask: "background-music"
 
   pkg "background-music-macOS-nightly-arm64.pkg"
+
+  postflight do
+    app_path = appdir/"Background Music.app"
+    next unless app_path.exist?
+
+    system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", app_path]
+  end
 
   uninstall_postflight do
     system_command "/usr/bin/killall",
@@ -32,8 +40,6 @@ cask "background-music@nightly" do
   ]
 
   caveats <<~EOS
-    This build is unsigned. After install run:
-      xattr -d com.apple.quarantine /Applications/Background\\ Music.app
     First run may require granting "microphone" access (virtual input for system audio).
     See: https://github.com/kyleneideck/BackgroundMusic#troubleshooting
   EOS

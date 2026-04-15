@@ -6,13 +6,15 @@ cask "audacity@nightly" do
   name "Audacity"
   desc "Audio editor"
   homepage "https://www.audacityteam.org/beta/"
+
   conflicts_with cask: "audacity"
 
   app "Audacity.app"
 
-  caveats <<~EOS
-    This build isn't signed; install with `--no-quarantine`, or after install run:
-    xattr -d com.apple.quarantine /Applications/Audacity.app
-    read more: https://support.apple.com/en-us/102445
-  EOS
+  postflight do
+    app_path = appdir/"Audacity.app"
+    next unless app_path.exist?
+
+    system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", app_path]
+  end
 end

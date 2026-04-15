@@ -52,7 +52,7 @@ jobs:
           git branch -r | grep 'origin/atoll-' | while read -r branch; do
             branch=${branch#origin/}
             git push origin --delete "$branch"
-          done
+          done || true
         env:
           GH_TOKEN: ${{ secrets.PAT }}
 
@@ -62,9 +62,14 @@ jobs:
           VERSION="${{ steps.fetch-release.outputs.version }}"
           SHA256="${{ steps.download.outputs.sha256 }}"
 
-          perl -i -pe 's/^(\s*version\s+)".+?"/$1"$ENV{VERSION}"/ if !$done++ && /version/' Casks/atoll.rb
-          perl -i -pe 's/^(\s*sha256\s+)".+?"/$1"$ENV{SHA256}"/' Casks/atoll.rb
-          perl -i -pe 's/(\| `atoll`\s+\| `)([^`]+)(`\s*\|)/$1$ENV{VERSION}$3/ if /atoll/' README.md
+          if [ -z "$VERSION" ] || [ "$VERSION" = "null" ] || [ -z "$SHA256" ] || [ "$SHA256" = "null" ]; then
+            echo "Error: Missing version or checksum. Aborting update." >&2
+            exit 1
+          fi
+
+          VERSION="$VERSION" perl -i -pe 's/^(\s*version\s+)".+?"/$1"$ENV{VERSION}"/' Casks/atoll.rb
+          SHA256="$SHA256" perl -i -pe 's/^(\s*sha256\s+)".+?"/$1"$ENV{SHA256}"/' Casks/atoll.rb
+          VERSION="$VERSION" perl -i -pe 's/(\| `atoll`\s+\| `)([^`]+)(`\s*\|)/$1$ENV{VERSION}$3/ if /atoll/' README.md
 
       - name: Create Pull Request
         if: (steps.current.outputs.version != steps.fetch-release.outputs.version && steps.fetch-release.outputs.version != '' && steps.fetch-release.outputs.version != 'null') || github.event_name == 'workflow_dispatch'
