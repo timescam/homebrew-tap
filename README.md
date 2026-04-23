@@ -23,7 +23,7 @@ brew install timescam/tap/{formula}
 | Formula        | Version          | Description                                                                                                                                       |
 | -------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `atoll`        | ``          | Dynamic Island utility<br />https://github.com/Ebullioscopic/Atoll                                                                               |
-| `pay-respects` | `0.8.5` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects                         |
+| `pay-respects` | `0.8.6` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects                         |
 | `localsend-go` | `1.2.7`          | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                                                 |
 | `imFile` | `2.0.5` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                                                |
 | `koharu` | `0.47.8` | ML-powered manga translator.<br />https://github.com/mayocream/koharu                                                                             |
