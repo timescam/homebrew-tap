@@ -18,11 +18,17 @@ Then install the formula:
 brew install timescam/tap/{formula}
 ```
 
+Or install the cask:
+
+```sh
+brew install --cask timescam/tap/{cask}
+```
+
 ## Available Packages
 
 | Formula        | Version          | Description                                                                                                                                       |
 | -------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `atoll`        | ``          | Dynamic Island utility<br />https://github.com/Ebullioscopic/Atoll                                                                               |
+| `atoll`        | `2.1.0`          | Dynamic Island utility<br />https://github.com/Ebullioscopic/Atoll                                                                               |
 | `pay-respects` | `nightly` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects                         |
 | `localsend-go` | `1.2.7`          | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                                                 |
 | `imFile` | `2.0.5` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                                                |
@@ -42,6 +48,7 @@ brew install timescam/tap/{formula}
 | `dvdts`                        | `HEAD`    | Terminal screensaver similar to dvd bouncing logo; Uses the distro/OS name/custom text instead<br />https://github.com/ameyrk99/dvdts                            |
 | `audacity@nightly`             | `nightly` | Audacity nightly automated builds<br />https://www.audacityteam.org/beta/                                                                                        |
 | `background-music@nightly`     | `nightly` | Background Music nightly automated builds<br />https://github.com/kyleneideck/BackgroundMusic                                                                    |
+| `raycast@beta`                 | `0.61.0.0` | Launcher and productivity tool (beta channel, auto-updates in-app)<br />https://www.raycast.com/                                                     |
 
 ### Deprecated
 
