@@ -1,5 +1,5 @@
 cask "atoll" do
-  version "2.1.0"
+  version "2.2.0"
   sha256 ""
 
   url "https://github.com/Ebullioscopic/Atoll/releases/download/v#{version}/Atoll.#{version}.dmg",
