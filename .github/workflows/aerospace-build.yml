@@ -1,0 +1,90 @@
+name: aerospace-build-nightly
+
+on:
+  schedule:
+    - cron: '0 19 * * *'  # Runs daily
+  workflow_dispatch:      # Allows manual trigger
+
+jobs:
+  build-aerospace:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          brew install xcbeautify fish bash swiftly
+
+      - name: Select Xcode
+        run: |
+          # AeroSpace requires the latest Xcode features. 
+          # On GitHub runners, we try to select the newest available Xcode.
+          # Based on AeroSpace's own CI logic:
+          if sw_vers -productVersion | grep -q "^14"; then
+            sudo xcode-select -s "/Applications/Xcode_16.app/Contents/Developer"
+          else
+            # Try to find the latest Xcode if on macOS 15+
+            LATEST_XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -n 1)
+            sudo xcode-select -s "$LATEST_XCODE/Contents/Developer"
+          fi
+          xcodebuild -version
+
+      - name: Clone AeroSpace source
+        run: |
+          git clone https://github.com/nikitabobko/AeroSpace.git AeroSpace
+
+      - name: Setup Swift via swiftly
+        working-directory: AeroSpace
+        run: |
+          swiftly init --skip-install --assume-yes
+          echo "$HOME/.swiftly/bin" >> $GITHUB_PATH
+          # Use the swiftly from the newly added path to install the required swift version
+          export PATH="$HOME/.swiftly/bin:$PATH"
+          swiftly install
+
+      - name: Resolve Swift Packages
+        working-directory: AeroSpace
+        run: |
+          xcodebuild -resolvePackageDependencies -scheme AeroSpace
+
+      - name: Build AeroSpace
+        working-directory: AeroSpace
+        run: |
+          # Use ad-hoc signing (-) since we don't have the developer certificate
+          ./build-release.sh --build-version nightly --codesign-identity -
+
+      - name: Find and prepare artifact
+        id: prepare-artifact
+        run: |
+          ZIP_PATH=$(find AeroSpace/.release -name "AeroSpace-vnightly.zip" | head -n 1)
+          if [ -z "$ZIP_PATH" ]; then
+            echo "Error: No ZIP artifact found in .release directory"
+            exit 1
+          fi
+          echo "Found artifact: $ZIP_PATH"
+          cp "$ZIP_PATH" ./AeroSpace-vnightly.zip
+          echo "archive_name=AeroSpace-vnightly.zip" >> $GITHUB_OUTPUT
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: aerospace-nightly
+          name: AeroSpace Nightly Build ${{ steps.date.outputs.date }}
+          body: |
+            Automated nightly build of AeroSpace from main branch.
+
+            Built on: ${{ steps.date.outputs.date }}
+            Architecture: Universal (ARM64 & x86_64)
+
+            This is an automated build from the latest main branch. Use at your own risk.
+            Ad-hoc signed (-). You may need to remove the quarantine attribute after installation.
+          draft: false
+          prerelease: true
+          files: ./${{ steps.prepare-artifact.outputs.archive_name }}
