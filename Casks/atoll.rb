@@ -8,7 +8,5 @@ cask "atoll" do
   desc "Dynamic Island utility"
   homepage "https://getatoll.app/"
 
-  depends_on macos: ">= :sonoma"
-
   app "Atoll.app"
 end
