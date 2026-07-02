@@ -31,7 +31,7 @@ brew install --cask timescam/tap/{cask}
 | `atoll`        | `2.2.0`          | Dynamic Island utility<br />https://github.com/Ebullioscopic/Atoll                                                                                |
 | `pay-respects` | `nightly`        | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects                         |
 | `localsend-go` | `1.2.7`          | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                                                 |
-| `imFile`       | `2.0.5`          | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                                                |
+| `imFile` | `2.0.6` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                                                |
 | `koharu`       | `0.61.2`         | ML-powered manga translator.<br />https://github.com/mayocream/koharu                                                                             |
 | `motrix-next`  | `3.9.6`          | Modern Tauri-based download manager for macOS.<br />https://github.com/AnInsomniacy/motrix-next                                                   |
 | `pokeget`      | `1.6.7`          | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                                                       |
