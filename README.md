@@ -28,7 +28,7 @@ brew install --cask timescam/tap/{cask}
 
 | Formula        | Version          | Description                                                                                                                                       |
 | -------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `atoll`        | `2.2.0`          | Dynamic Island utility<br />https://github.com/Ebullioscopic/Atoll                                                                                |
+| `atoll`        | `2.3.2`          | Dynamic Island utility<br />https://github.com/Ebullioscopic/Atoll                                                                                |
 | `pay-respects` | `nightly`        | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects                         |
 | `localsend-go` | `1.2.7`          | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                                                 |
 | `imFile` | `2.1.0` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                                                |
