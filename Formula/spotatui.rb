@@ -1,16 +1,16 @@
 class Spotatui < Formula
   desc "Spotify client for the terminal (Rust TUI, native streaming)"
   homepage "https://github.com/LargeModGames/spotatui"
-  version "0.40.3"
+  version "0.41.0"
 
   on_arm do
     url "https://github.com/LargeModGames/spotatui/releases/download/v#{version}/spotatui-macos-aarch64.tar.gz"
-    sha256 "aaf6fd2ecac45d86a1d2896b81d09d17a48cc8dae7a7779338e1824dad55c2b0"
+    sha256 "1d25bbf0d469fb15b44941df3c1668e9462a40abcc86c8c32a6ebcd61f52e195"
   end
 
   on_intel do
     url "https://github.com/LargeModGames/spotatui/releases/download/v#{version}/spotatui-macos-x86_64.tar.gz"
-    sha256 "49d13d7239c15af1c60eac0ef5493331884cfbe18071362360bf00ade364f14e"
+    sha256 "2bd5ffe7a3332bba91cba11caec79625b5486fde8075bd4c7dd5ac6323e604ce"
   end
 
   def install
