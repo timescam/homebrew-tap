@@ -61,6 +61,7 @@ jobs:
         run: |
           VERSION="${{ steps.fetch-release.outputs.version }}"
           SHA256="${{ steps.download.outputs.sha256 }}"
+          DMG_URL="${{ steps.fetch-release.outputs.dmg_url }}"
 
           if [ -z "$VERSION" ] || [ "$VERSION" = "null" ] || [ -z "$SHA256" ] || [ "$SHA256" = "null" ]; then
             echo "Error: Missing version or checksum. Aborting update." >&2
@@ -69,6 +70,7 @@ jobs:
 
           VERSION="$VERSION" perl -i -pe 's/^(\s*version\s+)".+?"/$1"$ENV{VERSION}"/' Casks/koharu.rb
           SHA256="$SHA256" perl -i -pe 's/^(\s*sha256\s+)".+?"/$1"$ENV{SHA256}"/' Casks/koharu.rb
+          DMG_URL="$DMG_URL" perl -i -pe 's/^(\s*url\s+)".+?"/$1"$ENV{DMG_URL}"/' Casks/koharu.rb
           VERSION="$VERSION" perl -i -pe 's/(\| `koharu`\s+\| `)([^`]+)(`\s*\|)/$1$ENV{VERSION}$3/ if /koharu/' README.md
 
       - name: Create Pull Request
