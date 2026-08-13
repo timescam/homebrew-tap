@@ -34,6 +34,7 @@ brew install --cask timescam/tap/{cask}
 | `imFile` | `2.3.2` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                                                |
 | `koharu`       | `0.65.3`         | ML-powered manga translator.<br />https://github.com/mayocream/koharu                                                                             |
 | `motrix-next`  | `3.9.7`          | Modern Tauri-based download manager for macOS.<br />https://github.com/AnInsomniacy/motrix-next                                                   |
+| `musicbrainz-picard@3` | `3.0.0b9` | Music tagger (v3.x pre-releases, conflicts with musicbrainz-picard).<br />https://picard.musicbrainz.org/                                                                     |
 | `pokeget`      | `1.6.7`          | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                                                       |
 | `zagi`         | `0.2.0`          | A better git for z.<br />https://github.com/mattzcarey/zagi                                                                                       |
 | `gopeed-web`   | `1.9.3`          | A modern download manager that supports all platforms. Built with Golang and Flutter.<br />https://github.com/GopeedLab/gopeed                    |
