@@ -1,7 +1,7 @@
 cask "imfile" do
   arch arm: "-arm64"
 
-  version "2.3.2"
+  version "2.3.4"
   sha256 arm:   "2db3324abda9aa072dab0eb6d38cf21329ad16de6b203feca74d42f5b398ee32",
          intel: "aa46960c8766a14cfc8c55571dcd407d0349af8de7f0f281ff6a15d4ac5bf7f0"
 
