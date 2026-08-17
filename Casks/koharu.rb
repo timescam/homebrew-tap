@@ -1,8 +1,8 @@
 cask "koharu" do
-  version "0.70.2"
-  sha256 "8cde1d807bf88623edc691bb46449fdeaaa66825ea85f561e78d86b74bdd9e6d"
+  version "0.73.0"
+  sha256 "29532fc95272e572162978503377780e1d8c4c97046b3444e53d6b70ac5df253"
 
-  url "https://github.com/mayocream/koharu/releases/download/0.70.2/koharu_0.70.2_aarch64.dmg",
+  url "https://github.com/mayocream/koharu/releases/download/0.73.0/koharu_0.73.0_aarch64.dmg",
       verified: "github.com/mayocream/koharu/"
   name "Koharu"
   desc "ML-powered manga translator"
