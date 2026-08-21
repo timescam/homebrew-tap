@@ -1,0 +1,77 @@
+name: boring-notch-build-nightly
+
+on:
+  schedule:
+    - cron: "0 19 * * *"
+  workflow_dispatch:
+
+jobs:
+  build-boring-notch:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          LATEST_XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -n 1)
+          sudo xcode-select -s "$LATEST_XCODE/Contents/Developer"
+          xcodebuild -version
+
+      - name: Clone boring.notch source
+        run: git clone --depth 1 https://github.com/TheBoredTeam/boring.notch.git boring-notch-source
+
+      - name: Resolve Swift packages
+        working-directory: boring-notch-source
+        run: xcodebuild -resolvePackageDependencies -project boringNotch.xcodeproj
+
+      - name: Generate schemes
+        working-directory: boring-notch-source
+        run: xcodebuild -project boringNotch.xcodeproj -list
+
+      - name: Archive boringNotch
+        working-directory: boring-notch-source
+        run: |
+          xcodebuild archive \
+            -project boringNotch.xcodeproj \
+            -scheme boringNotch \
+            -configuration Release \
+            -destination "generic/platform=macOS" \
+            -archivePath "$PWD/build/boringNotch" \
+            CODE_SIGN_IDENTITY="-" \
+            DEVELOPMENT_TEAM="" \
+            ONLY_ACTIVE_ARCH=NO
+
+      - name: Zip app
+        id: prepare-artifact
+        run: |
+          APP_PATH=$(find boring-notch-source/build -path "*.xcarchive/Products/Applications/*.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "Error: No .app found in archive"
+            exit 1
+          fi
+          codesign --force --deep --sign - "$APP_PATH"
+          ditto -c -k --keepParent "$APP_PATH" ./boringNotch-nightly.zip
+          echo "archive_name=boringNotch-nightly.zip" >> "$GITHUB_OUTPUT"
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: boring-notch-nightly
+          name: Boring Notch Nightly Build ${{ steps.date.outputs.date }}
+          body: |
+            Automated nightly build of Boring Notch from main.
+
+            Built on: ${{ steps.date.outputs.date }}
+            Ad-hoc signed (-). Quarantine is stripped on install.
+
+            Use at your own risk.
+          draft: false
+          prerelease: true
+          files: ./${{ steps.prepare-artifact.outputs.archive_name }}
