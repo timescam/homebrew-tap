@@ -45,11 +45,6 @@ jobs:
           export PATH="$HOME/.swiftly/bin:$PATH"
           swiftly install
 
-      - name: Resolve Swift Packages
-        working-directory: AeroSpace
-        run: |
-          xcodebuild -resolvePackageDependencies -scheme AeroSpace
-
       - name: Build AeroSpace
         working-directory: AeroSpace
         run: |
