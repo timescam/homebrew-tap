@@ -32,7 +32,7 @@ brew install --cask timescam/tap/{cask}
 | `pay-respects` | `0.8.8`         | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects                         |
 | `localsend-go` | `1.2.7`          | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go                                                                 |
 | `imFile` | `2.3.4` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop                                                                |
-| `koharu`       | `0.78.1`         | ML-powered manga translator.<br />https://github.com/mayocream/koharu                                                                             |
+| `koharu`       | `0.79.0`         | ML-powered manga translator.<br />https://github.com/mayocream/koharu                                                                             |
 | `motrix-next`  | `3.9.7`          | Modern Tauri-based download manager for macOS.<br />https://github.com/AnInsomniacy/motrix-next                                                   |
 | `musicbrainz-picard@3` | `3.0.0b9` | Music tagger (v3.x pre-releases, conflicts with musicbrainz-picard).<br />https://picard.musicbrainz.org/                                                                     |
 | `pokeget`      | `1.6.7`          | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs                                                                       |
