@@ -8,9 +8,13 @@ class Peaclock < Formula
   depends_on "icu4c"
 
   def install
-    system "./RUNME.sh", "build", "--",
-           "-DCMAKE_CXX_COMPILER=#{Formula["gcc@16"].opt_bin}/g++-16",
-           "-DCMAKE_CXX_FLAGS=-I#{Formula["icu4c"].opt_include} -L#{Formula["icu4c"].opt_lib}"
+    args = [
+      "-DCMAKE_CXX_COMPILER=#{Formula["gcc@16"].opt_bin}/g++-16",
+      "-DCMAKE_CXX_FLAGS=-I#{Formula["icu4c"].opt_include} -mcpu=native",
+    ]
+    args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.arch}" if OS.mac?
+
+    system "./RUNME.sh", "build", "--", *args
 
     bin.install "build/release/peaclock"
   end
