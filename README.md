@@ -51,10 +51,10 @@ brew install --cask timescam/tap/{cask}
 | `background-music@nightly`     | `nightly`  | Background Music nightly automated builds<br />https://github.com/kyleneideck/BackgroundMusic                                                                    |
 | `aerospace@nightly`            | `nightly`  | I3-like tiling window manager (nightly build)<br />https://github.com/nikitabobko/AeroSpace                                                                      |
 | `boring-notch@nightly`          | `nightly`  | Notch overlay: media, calendar, HUD (nightly build)<br />https://github.com/TheBoredTeam/boring.notch                                                            |
-| `raycast@beta`                 | `0.61.0.0` | Launcher and productivity tool (beta channel, auto-updates in-app)<br />https://www.raycast.com/                                                                 |
 
 ### Deprecated
 
 | Formula          | Description                                                                                        |
 | ---------------- | -------------------------------------------------------------------------------------------------- |
 | `theboringnotch` | Use the official tap: `brew install --cask TheBoredTeam/boring-notch/boring-notch --no-quarantine` |
+| `raycast@beta`   | v2 is no longer in beta; use the official tap: `brew install --cask raycast`                         |
