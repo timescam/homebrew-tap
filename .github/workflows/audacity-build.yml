@@ -7,16 +7,25 @@ on:
 
 jobs:
   build-audacity:
-    runs-on: macos-latest
+    runs-on: macos-26
     permissions:
       contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.10.1"
+          host: mac
+          target: desktop
+          arch: clang_64
+          modules: qt5compat qtnetworkauth qtshadertools qtwebsockets qtgraphs qtquick3d
+          cache: true
+
       - name: Install dependencies
-        run: |
-          brew install qt@6
+        run: brew install cmake ninja pkg-config
 
       - name: Clone Audacity source
         run: |
@@ -25,23 +34,23 @@ jobs:
       - name: Build Audacity
         working-directory: audacity-source
         run: |
-          cmake -S . -B build -DCMAKE_INSTALL_PREFIX=output -DCMAKE_OSX_ARCHITECTURES=arm64
-          mkdir -p output
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=output \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
+            -DAU4_BUILD_MODE=dev
           cmake --build build
           cmake --install build
 
       - name: Bundle Qt frameworks with macdeployqt
         working-directory: audacity-source
         run: |
-          QT_PREFIX=$(brew --prefix qt@6)
-          export QTDIR="$QT_PREFIX"
           APP_PATH=$(find output -name "*.app" -type d | head -n 1)
           if [ -z "$APP_PATH" ]; then
             echo "Error: No .app bundle found in output directory for macdeployqt"
             exit 1
           fi
-          # Use Homebrew Qt's qml dir so QML modules and their dependencies are found
-          "$QT_PREFIX/bin/macdeployqt" "$APP_PATH" -qmldir="$QT_PREFIX/qml" -always-overwrite
+          macdeployqt "$APP_PATH" -qmldir="$QT_ROOT_DIR/qml" -always-overwrite
 
       - name: Re-sign app bundle
         working-directory: audacity-source
