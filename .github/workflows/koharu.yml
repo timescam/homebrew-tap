@@ -23,7 +23,12 @@ jobs:
       - name: Fetch latest version and download URL
         id: fetch-release
         run: |
-          RELEASE_INFO=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" "https://api.github.com/repos/mayocream/koharu/releases")
+          RELEASE_INFO=$(curl -sL -H "Authorization: token ${{ secrets.PAT }}" "https://api.github.com/repos/koharu-rs/koharu/releases")
+          if ! echo "$RELEASE_INFO" | jq -e 'type == "array"' >/dev/null; then
+            echo "GitHub API did not return a releases array:" >&2
+            echo "$RELEASE_INFO" >&2
+            exit 1
+          fi
           RELEASE=$(echo "$RELEASE_INFO" | jq -c '[.[] | select(.draft == false and .prerelease == false)][0]')
           VERSION=$(echo "$RELEASE" | jq -r '.tag_name' | sed 's/^v//')
           DMG_URL=$(echo "$RELEASE" | jq -r '.assets[] | select(.name | endswith("_aarch64.dmg")) | .browser_download_url' | head -n 1)
