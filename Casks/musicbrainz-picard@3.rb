@@ -19,9 +19,18 @@ cask "musicbrainz-picard@3" do
   homepage "https://picard.musicbrainz.org/"
 
   livecheck do
-    url "https://api.github.com/repos/metabrainz/picard/releases"
-    strategy :json
-    regex(/release-(?<version>[3-9]\.\d+(?:\.\d+)*(?:[a-z]+\d+)?)\b/i)
+    url :url
+    regex(/^release-([3-9]\.\d+(?:\.\d+)*(?:[a-z]+\d+)?)$/i)
+    strategy :github_releases do |json, regex|
+      json.map do |release|
+        next if release["draft"]
+
+        match = release["tag_name"]&.match(regex)
+        next if match.blank?
+
+        match[1]
+      end
+    end
   end
 
   depends_on :macos

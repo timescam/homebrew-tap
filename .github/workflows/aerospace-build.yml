@@ -20,16 +20,8 @@ jobs:
 
       - name: Select Xcode
         run: |
-          # AeroSpace requires the latest Xcode features. 
-          # On GitHub runners, we try to select the newest available Xcode.
-          # Based on AeroSpace's own CI logic:
-          if sw_vers -productVersion | grep -q "^14"; then
-            sudo xcode-select -s "/Applications/Xcode_16.app/Contents/Developer"
-          else
-            # Try to find the latest Xcode if on macOS 15+
-            LATEST_XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -n 1)
-            sudo xcode-select -s "$LATEST_XCODE/Contents/Developer"
-          fi
+          LATEST_XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -n 1)
+          sudo xcode-select -s "$LATEST_XCODE/Contents/Developer"
           xcodebuild -version
 
       - name: Clone AeroSpace source

@@ -3,6 +3,11 @@ class Spotatui < Formula
   homepage "https://github.com/LargeModGames/spotatui"
   version "0.41.0"
 
+  livecheck do
+    url :homepage
+    strategy :github_latest
+  end
+
   on_arm do
     url "https://github.com/LargeModGames/spotatui/releases/download/v#{version}/spotatui-macos-aarch64.tar.gz"
     sha256 "1d25bbf0d469fb15b44941df3c1668e9462a40abcc86c8c32a6ebcd61f52e195"

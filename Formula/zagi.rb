@@ -3,6 +3,11 @@ class Zagi < Formula
   homepage "https://github.com/mattzcarey/zagi"
   version "0.2.0"
 
+  livecheck do
+    url :homepage
+    strategy :github_latest
+  end
+
   on_arm do
     url "https://github.com/mattzcarey/zagi/releases/download/v#{version}/zagi-macos-aarch64.tar.gz"
     sha256 "3cc13025170768c452f82c189329101748ccce597a0e4e80f37975eaac4e0d25"

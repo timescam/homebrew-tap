@@ -3,6 +3,11 @@ class Pokeget < Formula
   homepage "https://github.com/talwat/pokeget-rs"
   version "1.6.7"
 
+  livecheck do
+    url :homepage
+    strategy :github_latest
+  end
+
   on_arm do
     url "https://github.com/talwat/pokeget-rs/releases/download/#{version}/pokeget-macOS-aarch64.tar.gz"
     sha256 "0bf716d188e1d226778568ddd6d9f832a124db4490f0da256d53788634f2e544"
