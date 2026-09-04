@@ -26,7 +26,6 @@ jobs:
           - atoll
           - gopeed-web
           - imfile
-          - koharu
           - localsend-go
           - motrix-next
           - "musicbrainz-picard@3"

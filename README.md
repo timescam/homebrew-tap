@@ -32,7 +32,6 @@ brew install --cask timescam/tap/{cask}
 | `pay-respects` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects |
 | `localsend-go` | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go |
 | `imFile` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop |
-| `koharu` | ML-powered manga translator.<br />https://github.com/mayocream/koharu |
 | `motrix-next` | Modern Tauri-based download manager for macOS.<br />https://github.com/AnInsomniacy/motrix-next |
 | `musicbrainz-picard@3` | Music tagger (v3.x pre-releases, conflicts with musicbrainz-picard).<br />https://picard.musicbrainz.org/ |
 | `pokeget` | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs |
@@ -58,3 +57,4 @@ brew install --cask timescam/tap/{cask}
 | ---------------- | -------------------------------------------------------------------------------------------------- |
 | `theboringnotch` | Use the official tap: `brew install --cask TheBoredTeam/boring-notch/boring-notch --no-quarantine` |
 | `raycast@beta`   | v2 is no longer in beta; use the official tap: `brew install --cask raycast`                         |
+| `koharu`         | Now in Homebrew Cask: `brew install --cask koharu`                                                  |

@@ -8,10 +8,7 @@ cask "koharu" do
   desc "ML-powered manga translator"
   homepage "https://koharu.rs/"
 
-  livecheck do
-    url :url
-    strategy :github_latest
-  end
+  deprecate! date: "2026-09-04", because: "moved to homebrew/cask", replacement_cask: "koharu"
 
   depends_on arch: :arm64
 
