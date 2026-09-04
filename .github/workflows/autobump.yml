@@ -45,6 +45,18 @@ jobs:
         id: git_setup
         uses: Homebrew/actions/git-user-config@a657b8b0cd35d0f65cce41fce9b24cf054b49869 # 2026.08.24.1
 
+      - name: Delete leftover bump branches
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PKG: ${{ matrix.package }}
+        run: |
+          git ls-remote --heads "https://github.com/${GITHUB_REPOSITORY}.git" |
+            awk '{print $2}' | sed 's|^refs/heads/||' |
+            { grep -F -e "bump-${PKG}-" -e "${PKG}-" || true; } |
+            while read -r branch; do
+              git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" --delete "$branch" || true
+            done
+
       - name: Bump ${{ matrix.package }}
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
