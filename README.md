@@ -38,6 +38,7 @@ brew install --cask timescam/tap/{cask}
 | `zagi` | A better git for z.<br />https://github.com/mattzcarey/zagi |
 | `gopeed-web` | A modern download manager that supports all platforms. Built with Golang and Flutter.<br />https://github.com/GopeedLab/gopeed |
 | `spotatui` | A fully standalone Spotify client for the terminal. Native streaming included, no daemon required.<br />https://github.com/LargeModGames/spotatui |
+| `music-lyric-app` | NetEase Cloud and QQ Music lyrics tool<br />https://github.com/jitwxs/163MusicLyrics |
 
 ### Not tracked by daily GitHub Actions
 
