@@ -11,10 +11,9 @@ cask "audacity@nightly" do
 
   app "Audacity.app"
 
-  postflight do
-    app_path = appdir/"Audacity.app"
-    next unless app_path.exist?
-
-    system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", app_path]
+  postflight_steps do
+    if_path_exists "Audacity.app", base: :appdir do
+      run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Audacity.app"]
+    end
   end
 end

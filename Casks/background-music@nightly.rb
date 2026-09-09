@@ -11,18 +11,14 @@ cask "background-music@nightly" do
 
   pkg "background-music-macOS-nightly-arm64.pkg"
 
-  postflight do
-    app_path = appdir/"Background Music.app"
-    next unless app_path.exist?
-
-    system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", app_path]
+  postflight_steps do
+    if_path_exists "Background Music.app", base: :appdir do
+      run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Background Music.app"]
+    end
   end
 
-  uninstall_postflight do
-    system_command "/usr/bin/killall",
-                   args:         ["coreaudiod"],
-                   sudo:         true,
-                   must_succeed: true
+  uninstall_postflight_steps do
+    terminate_process "coreaudiod", sudo: true, must_succeed: true
   end
 
   uninstall launchctl: "com.bearisdriving.BGM.XPCHelper",

@@ -25,10 +25,9 @@ cask "motrix-next" do
 
   app "MotrixNext.app"
 
-  postflight do
-    app_path = appdir/"MotrixNext.app"
-    next unless app_path.exist?
-
-    system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", app_path]
+  postflight_steps do
+    if_path_exists "MotrixNext.app", base: :appdir do
+      run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/MotrixNext.app"]
+    end
   end
 end

@@ -13,11 +13,10 @@ cask "aerospace@nightly" do
   app "AeroSpace-vnightly/AeroSpace.app"
   binary "AeroSpace-vnightly/bin/aerospace"
 
-  postflight do
-    app_path = appdir/"AeroSpace.app"
-    next unless app_path.exist?
-
-    system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", app_path]
+  postflight_steps do
+    if_path_exists "AeroSpace.app", base: :appdir do
+      run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/AeroSpace.app"]
+    end
   end
 
   zap trash: [
