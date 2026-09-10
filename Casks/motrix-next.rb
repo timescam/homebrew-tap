@@ -1,13 +1,13 @@
 cask "motrix-next" do
-  version "3.9.8"
+  version "3.9.9"
 
   on_arm do
-    sha256 "bae521515cdd283129d8945d0e229163e0d7750d478c0226e308de0818eff8f6"
+    sha256 "3d5d7c6648c15712fd08b0ae390599e0cd523f951448e36d53ae8355e13ecd47"
 
     url "https://github.com/AnInsomniacy/motrix-next/releases/download/v#{version}/MotrixNext_#{version}_aarch64.dmg"
   end
   on_intel do
-    sha256 "03a6809745ba9b1d09e4e0ca86bf1eaecfd8ecc3b048cf918317057b50fdb02b"
+    sha256 "ae5b4a04aa26eb89baca774c87627b3d24c67c3fae364f475855e83ee9864106"
 
     url "https://github.com/AnInsomniacy/motrix-next/releases/download/v#{version}/MotrixNext_#{version}_x64.dmg"
   end
