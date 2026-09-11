@@ -60,10 +60,19 @@ jobs:
       - name: Bump ${{ matrix.package }}
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.PAT }}
+          GH_TOKEN: ${{ secrets.PAT }}
           HOMEBREW_GIT_COMMITTER_NAME: ${{ steps.git_setup.outputs.name }}
           HOMEBREW_GIT_COMMITTER_EMAIL: ${{ steps.git_setup.outputs.email }}
           TAP_NAME: ${{ steps.set-up-homebrew.outputs.tap-name }}
-        run: brew bump --no-fork --open-pr "$TAP_NAME/${{ matrix.package }}"
+          PKG: ${{ matrix.package }}
+        run: |
+          tap_root=$(brew --repo "$TAP_NAME")
+          formula="$tap_root/Formula/${PKG}.rb"
+          if [[ -f "$formula" ]] && grep -q "on_arm do" "$formula"; then
+            bash "$tap_root/.github/scripts/bump-arch-formula.sh" "$PKG"
+          else
+            brew bump --no-fork --open-pr "$TAP_NAME/$PKG"
+          fi
 
   merge:
     needs: autobump
