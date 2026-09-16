@@ -19,10 +19,9 @@ jobs:
           brew install xcbeautify fish bash swiftly
 
       - name: Select Xcode
-        run: |
-          LATEST_XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -n 1)
-          sudo xcode-select -s "$LATEST_XCODE/Contents/Developer"
-          xcodebuild -version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest
 
       - name: Clone AeroSpace source
         run: |
@@ -35,7 +34,8 @@ jobs:
           echo "$HOME/.swiftly/bin" >> $GITHUB_PATH
           # Use the swiftly from the newly added path to install the required swift version
           export PATH="$HOME/.swiftly/bin:$PATH"
-          swiftly install
+          # 6.4 is in .swift-version but the release pkg is not on download.swift.org yet
+          swiftly install || swiftly install 6.4-snapshot
 
       - name: Build AeroSpace
         working-directory: AeroSpace
