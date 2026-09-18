@@ -16,7 +16,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew install xcbeautify fish bash swiftly
+          brew install xcbeautify fish bash
 
       - name: Select Xcode
         uses: maxim-lobanov/setup-xcode@v1
@@ -26,16 +26,6 @@ jobs:
       - name: Clone AeroSpace source
         run: |
           git clone https://github.com/nikitabobko/AeroSpace.git AeroSpace
-
-      - name: Setup Swift via swiftly
-        working-directory: AeroSpace
-        run: |
-          swiftly init --skip-install --assume-yes
-          echo "$HOME/.swiftly/bin" >> $GITHUB_PATH
-          # Use the swiftly from the newly added path to install the required swift version
-          export PATH="$HOME/.swiftly/bin:$PATH"
-          # 6.4 is in .swift-version but the release pkg is not on download.swift.org yet
-          swiftly install || swiftly install 6.4-snapshot
 
       - name: Build AeroSpace
         working-directory: AeroSpace
@@ -60,7 +50,7 @@ jobs:
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: aerospace-nightly
           name: AeroSpace Nightly Build ${{ steps.date.outputs.date }}

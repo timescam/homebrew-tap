@@ -68,7 +68,7 @@ jobs:
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: background-music-nightly
           name: Background Music Nightly Build ${{ steps.date.outputs.date }}
