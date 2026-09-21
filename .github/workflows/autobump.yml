@@ -8,6 +8,7 @@ on:
       - .github/workflows/autobump.yml
   schedule:
     - cron: "0 19 * * *"
+    - cron: "0 8 * * *" # 16:00 HKT, boring-notch@nightly only
   workflow_dispatch:
 
 permissions: {}
@@ -17,22 +18,33 @@ defaults:
     shell: bash -xeuo pipefail {0}
 
 jobs:
+  packages:
+    runs-on: ubuntu-latest
+    outputs:
+      list: ${{ steps.pick.outputs.list }}
+    steps:
+      - name: Pick packages for this run
+        id: pick
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          nightly='"boring-notch@nightly"'
+          rest='"atoll","gopeed-web","imfile","localsend-go","motrix-next","musicbrainz-picard@3","pay-respects","pokeget","spotatui","zagi"'
+          case "$EVENT_NAME/$SCHEDULE" in
+            schedule/"0 8 * * *") list="$nightly" ;;
+            schedule/*) list="$rest" ;;
+            *) list="$rest,$nightly" ;;
+          esac
+          echo "list=[$list]" >> "$GITHUB_OUTPUT"
+
   autobump:
+    needs: packages
     runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
-        package:
-          - atoll
-          - gopeed-web
-          - imfile
-          - localsend-go
-          - motrix-next
-          - "musicbrainz-picard@3"
-          - pay-respects
-          - pokeget
-          - spotatui
-          - zagi
+        package: ${{ fromJSON(needs.packages.outputs.list) }}
     permissions:
       contents: write
       pull-requests: write
