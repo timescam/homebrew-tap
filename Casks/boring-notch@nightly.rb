@@ -1,6 +1,6 @@
 cask "boring-notch@nightly" do
-  version "f6245e1-274"
-  sha256 "3cbc6bec5e26436406d96768302d77eac86fa0ef1ce7aa0f8c8ddd307db35c0a"
+  version "73bfd54-275"
+  sha256 "13f3ac27428d2325507143977c0faa82dbfaab2919f49516c52882f8abd7317b"
 
   url "https://github.com/TheBoredTeam/boring.notch/releases/download/nightly-dev-#{version}/boringNotch-dev-#{version}.dmg"
   name "Boring Notch"
