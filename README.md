@@ -28,6 +28,7 @@ brew install --cask timescam/tap/{cask}
 
 | Formula | Description |
 | ------- | ----------- |
+| `aircard` | Apple Wallet card skinner for iOS 18+<br />https://github.com/mak5er/AirCard |
 | `atoll` | Dynamic Island utility<br />https://github.com/Ebullioscopic/Atoll |
 | `pay-respects` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects |
 | `localsend-go` | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go |
