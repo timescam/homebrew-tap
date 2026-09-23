@@ -30,7 +30,7 @@ jobs:
           SCHEDULE: ${{ github.event.schedule }}
         run: |
           nightly='"boring-notch@nightly"'
-          rest='"atoll","gopeed-web","imfile","localsend-go","motrix-next","musicbrainz-picard@3","pay-respects","pokeget","spotatui","zagi"'
+          rest='"aircard","atoll","gopeed-web","imfile","localsend-go","motrix-next","musicbrainz-picard@3","pay-respects","pokeget","spotatui","zagi"'
           case "$EVENT_NAME/$SCHEDULE" in
             schedule/"0 8 * * *") list="$nightly" ;;
             schedule/*) list="$rest" ;;
