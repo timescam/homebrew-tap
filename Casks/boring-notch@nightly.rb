@@ -1,22 +1,26 @@
 cask "boring-notch@nightly" do
-  version "73bfd54-275"
-  sha256 "13f3ac27428d2325507143977c0faa82dbfaab2919f49516c52882f8abd7317b"
+  version "2026.09.23.07.01.55.69c43e2"
+  sha256 "817ee9d9e8748f4b32c59d5416331d5a56b47bfa6fbe33a14c22f32dec00a825"
 
-  url "https://github.com/TheBoredTeam/boring.notch/releases/download/nightly-dev-#{version}/boringNotch-dev-#{version}.dmg"
+  # Rolling tag; query keeps the URL versioned so bump can refresh the sha256.
+  url "https://github.com/TheBoredTeam/boring.notch/releases/download/nightly/boringNotch-nightly.dmg?v=#{version}"
   name "Boring Notch"
   desc "Notch overlay: media, calendar, HUD (nightly build)"
   homepage "https://github.com/TheBoredTeam/boring.notch"
 
   livecheck do
     url :url
-    regex(/nightly-dev-(\h+-\d+)/i)
+    regex(/Commit:\s+(\h+)/i)
     strategy :github_releases do |json, regex|
-      json.filter_map do |release|
-        next if release["draft"]
+      release = json.find { |r| r["tag_name"] == "nightly" && !r["draft"] }
+      next unless release
 
-        match = release["tag_name"]&.match(regex)
-        match[1] if match
-      end
+      updated = release["assets"]&.find { |asset| asset["name"] == "boringNotch-nightly.dmg" }&.[]("updated_at")
+      next unless updated
+
+      stamp = updated[0, 19].tr("-T:", "...")
+      commit = release["body"]&.[](regex, 1)
+      [commit ? "#{stamp}.#{commit}" : stamp]
     end
   end
 
