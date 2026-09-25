@@ -12,16 +12,25 @@ cask "motrix-next" do
     url "https://github.com/AnInsomniacy/motrix-next/releases/download/v#{version}/MotrixNext_#{version}_x64.dmg"
   end
 
+  deprecate! date: "2026-09-25", because: "was renamed upstream to Rayburst",
+             replacement_cask: "rayburst"
+  disable! date: "2027-09-25", because: "was renamed upstream to Rayburst",
+           replacement_cask: "rayburst"
+
   name "Motrix Next"
   desc "Modern download manager rebuilt with Tauri"
-  homepage "https://motrix-next.pages.dev/"
+  homepage "https://rayburst.pages.dev/"
 
   livecheck do
-    url :url
-    strategy :github_latest
+    skip "Renamed upstream, see the rayburst cask"
   end
 
   depends_on :macos
+
+  caveats <<~EOS
+    Motrix Next is now Rayburst. Uninstall Motrix Next before installing Rayburst;
+    settings, tasks and history are not imported, but your downloaded files are kept.
+  EOS
 
   app "MotrixNext.app"
 
