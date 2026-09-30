@@ -30,11 +30,11 @@ cask "boring-notch@nightly" do
   ]
   depends_on macos: :sonoma
 
-  app "boringNotch.app"
+  app "Boring Notch.app"
 
   postflight_steps do
-    if_path_exists "boringNotch.app", base: :appdir do
-      run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/boringNotch.app"]
+    if_path_exists "Boring Notch.app", base: :appdir do
+      run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Boring Notch.app"]
     end
   end
 
