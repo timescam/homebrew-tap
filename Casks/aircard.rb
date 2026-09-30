@@ -1,6 +1,6 @@
 cask "aircard" do
-  version "1.2.4"
-  sha256 "005b5c7bc97ef8654ae34ad234dadd53c0503c9f9a76721dc26634c35f61d6ce"
+  version "1.2.5"
+  sha256 "ec8f34f25919a939aca44a928ff96d6b88a0a3774d5d4e8cfda7481dd8cb3e54"
 
   url "https://github.com/Mak5er/AirCard/releases/download/v#{version}/AirCard.dmg"
   name "AirCard"
@@ -12,7 +12,7 @@ cask "aircard" do
     strategy :github_latest
   end
 
-  depends_on macos: :monterey
+  depends_on macos: :sonoma
 
   app "AirCard.app"
 end
