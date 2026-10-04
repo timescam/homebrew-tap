@@ -1,6 +1,6 @@
 cask "aircard" do
-  version "1.2.5"
-  sha256 "ec8f34f25919a939aca44a928ff96d6b88a0a3774d5d4e8cfda7481dd8cb3e54"
+  version "1.2.6"
+  sha256 "3d622cc4d93b90cd5ce9d1d756f11cf69d8ee78379e300197e5eb1516a5970fd"
 
   url "https://github.com/Mak5er/AirCard/releases/download/v#{version}/AirCard.dmg"
   name "AirCard"
