@@ -35,7 +35,6 @@ brew install --cask timescam/tap/{cask}
 | `imFile` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop |
 | `plexo` | Download manager that uses multiple connections in parallel<br />https://github.com/anmolkapil/plexo |
 | `rayburst` | Modern Tauri-based download manager for macOS.<br />https://github.com/AnInsomniacy/rayburst |
-| `musicbrainz-picard@3` | Music tagger (v3.x pre-releases, conflicts with musicbrainz-picard).<br />https://picard.musicbrainz.org/ |
 | `pokeget` | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs |
 | `zagi` | A better git for z.<br />https://github.com/mattzcarey/zagi |
 | `gopeed-web` | A modern download manager that supports all platforms. Built with Golang and Flutter.<br />https://github.com/GopeedLab/gopeed |
@@ -62,3 +61,4 @@ brew install --cask timescam/tap/{cask}
 | `raycast@beta`   | v2 is no longer in beta; use the official tap: `brew install --cask raycast`                         |
 | `koharu`         | Now in Homebrew Cask: `brew install --cask koharu`                                                  |
 | `motrix-next`    | Renamed upstream to Rayburst: `brew install --cask timescam/tap/rayburst`. Uninstall first; settings, tasks and history are not imported |
+| `musicbrainz-picard@3` | Deprecated; use the official cask: `brew install --cask musicbrainz-picard` |
