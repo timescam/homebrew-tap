@@ -1,6 +1,6 @@
 cask "boring-notch@nightly" do
-  version "2026.10.20.03.25.43.3f1241c"
-  sha256 "3b53b47303e8f80aecf48d16251c669404d1e5f901df409ae4ad225d82626281"
+  version "2026.10.21.03.23.35.ed74b5e"
+  sha256 "b47f3fccc00c2468ca4171e659d3e012e27e29af69a6396a0eefb12af8fdc302"
 
   # Rolling tag; query keeps the URL versioned so bump can refresh the sha256.
   url "https://github.com/TheBoredTeam/boring.notch/releases/download/nightly/boringNotch-nightly.dmg?v=#{version}"
