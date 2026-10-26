@@ -32,7 +32,6 @@ brew install --cask timescam/tap/{cask}
 | `atoll` | Dynamic Island utility<br />https://github.com/Ebullioscopic/Atoll |
 | `pay-respects` | Command suggestions, command-not-found and thefuck replacement written in Rust<br />https://codeberg.org/iff/pay-respects |
 | `localsend-go` | CLI for localsend implemented in Go<br />https://github.com/meowrain/localsend-go |
-| `imFile` | A full-featured download manager.<br />https://github.com/imfile-io/imfile-desktop |
 | `plexo` | Download manager that uses multiple connections in parallel<br />https://github.com/anmolkapil/plexo |
 | `rayburst` | Modern Tauri-based download manager for macOS.<br />https://github.com/AnInsomniacy/rayburst |
 | `pokeget` | A better rust version of pokeget.<br />https://github.com/talwat/pokeget-rs |
@@ -62,3 +61,4 @@ brew install --cask timescam/tap/{cask}
 | `koharu`         | Now in Homebrew Cask: `brew install --cask koharu`                                                  |
 | `motrix-next`    | Renamed upstream to Rayburst: `brew install --cask timescam/tap/rayburst`. Uninstall first; settings, tasks and history are not imported |
 | `musicbrainz-picard@3` | Deprecated; use the official cask: `brew install --cask musicbrainz-picard` |
+| `imfile`         | No longer provided here; install from the upstream releases page: https://github.com/imfile-io/imfile-desktop/releases |
