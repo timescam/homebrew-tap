@@ -16,7 +16,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew install xcbeautify fish bash
+          brew install xcbeautify fish bash swiftly
 
       - name: Select Xcode
         uses: maxim-lobanov/setup-xcode@v1
@@ -26,6 +26,14 @@ jobs:
       - name: Clone AeroSpace source
         run: |
           git clone https://github.com/nikitabobko/AeroSpace.git AeroSpace
+
+      - name: Install Swift toolchain
+        working-directory: AeroSpace
+        run: |
+          # AeroSpace requires swiftly; bare `swiftly install` picks the version pinned in .swift-version
+          swiftly init --skip-install --assume-yes --verbose
+          swiftly install
+          swiftly run swift --version
 
       - name: Build AeroSpace
         working-directory: AeroSpace
