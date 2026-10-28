@@ -1,8 +1,9 @@
 cask "boring-notch@nightly" do
   version "2026.10.27.03.25.48.8041b26"
-  sha256 "3d9e893d2beccd332ac1b57679478c40a1cd19682a73669a19127cd11ef144c4"
+  sha256 :no_check
 
-  # Rolling tag; query keeps the URL versioned so bump can refresh the sha256.
+  # Upstream overwrites the nightly asset in place, so any pinned checksum goes
+  # stale as soon as it rebuilds. The query keys the download cache per build.
   url "https://github.com/TheBoredTeam/boring.notch/releases/download/nightly/boringNotch-nightly.dmg?v=#{version}"
   name "Boring Notch"
   desc "Notch overlay: media, calendar, HUD (nightly build)"
