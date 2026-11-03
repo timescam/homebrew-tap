@@ -1,7 +1,7 @@
 class PayRespects < Formula
   desc "CLI tool to pay respects"
   homepage "https://github.com/iffse/pay-respects"
-  version "0.8.8"
+  version "0.9.0"
 
   livecheck do
     url :homepage
@@ -11,12 +11,12 @@ class PayRespects < Formula
 
   on_arm do
     url "https://github.com/iffse/pay-respects/releases/download/v#{version}/pay-respects-#{version}-aarch64-apple-darwin.tar.zst"
-    sha256 "e834e928dcaf9cd72a99478bb61e0630ba76e32c7b228eb3a7be9c5f404cd548"
+    sha256 "ba11712db3dac2d4548abf4747186751636962271fdcda44d078463dde47e158"
   end
 
   on_intel do
     url "https://github.com/iffse/pay-respects/releases/download/v#{version}/pay-respects-#{version}-x86_64-apple-darwin.tar.zst"
-    sha256 "64c30e1a62605279abf219193c53bf251687ea419a0c99d2e15ae8b5b6a58587"
+    sha256 "0754726c1b504cfd471eaf3d0aad8ba763201902f0394ad774f65633712f95ac"
   end
 
   def install
