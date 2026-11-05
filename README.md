@@ -45,12 +45,41 @@ brew install --cask timescam/tap/{cask}
 | Formula                        | Version    | Description                                                                                                                                                      |
 | ------------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `peaclock`                     | `HEAD`     | A responsive and customizable clock, timer, and stopwatch for the terminal.<br />https://github.com/octobanana/peaclock                                          |
+| `pam-watchid`                  | `HEAD`     | PAM module for Apple Watch and Touch ID authentication<br />https://github.com/mostpinkest/pam-watchid                                                           |
 | `evangelion-clock-screensaver` | `1.1.2`    | A digital clock screensaver inspired by the graphical interfaces from Neon Genesis Evengelion.<br />https://github.com/Wandmalfarbe/evangelion-clock-screensaver |
 | `dvdts`                        | `HEAD`     | Terminal screensaver similar to dvd bouncing logo; Uses the distro/OS name/custom text instead<br />https://github.com/ameyrk99/dvdts                            |
 | `audacity@nightly`             | `nightly`  | Audacity nightly automated builds<br />https://www.audacityteam.org/beta/                                                                                        |
 | `background-music@nightly`     | `nightly`  | Background Music nightly automated builds<br />https://github.com/kyleneideck/BackgroundMusic                                                                    |
 | `aerospace@nightly`            | `nightly`  | I3-like tiling window manager (nightly build)<br />https://github.com/nikitabobko/AeroSpace                                                                      |
 | `boring-notch@nightly`          | `nightly`  | Notch overlay: media, calendar, HUD (nightly build)<br />https://github.com/TheBoredTeam/boring.notch                                                            |
+
+#### Enabling `pam-watchid`
+
+The formula only builds and installs the module; it never touches your PAM
+stack. Run:
+
+```sh
+brew install --HEAD timescam/tap/pam-watchid
+```
+
+Then add the line it prints in its caveats to `/etc/pam.d/sudo_local` on macOS
+14 and later, or to `/etc/pam.d/sudo` on macOS 13 and earlier:
+
+```text
+auth    sufficient    /opt/homebrew/opt/pam-watchid/lib/pam/pam_watchid.so
+```
+
+Keep every existing `auth` line and test in a second terminal before closing
+the one you edited from: a broken PAM stack stops `sudo` working.
+
+Do not move this module above `pam_tid.so`. Under `sudo` it reaches Local
+Authentication as uid 0, which has no enrolled fingerprints, so it can only
+offer the Watch. Apple's module passes the target user's uid, so Touch ID
+keeps working while this stays the fallback. Useful mainly on Macs with no
+Touch ID sensor, where the alternative is typing a password.
+
+See https://github.com/mostpinkest/pam-watchid/issues/9 for the coreauthd
+trace.
 
 ### Deprecated
 
