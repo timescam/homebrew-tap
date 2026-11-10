@@ -1,13 +1,13 @@
 cask "rayburst" do
-  version "4.1.1"
+  version "4.1.2"
 
   on_arm do
-    sha256 "715ed7f6eaf5a79e06d554f365a313b4843f90493f09b157091a15d665253b24"
+    sha256 "ed54a1d1bf0d4b0819aa24c7ee4c662f5e1e1e4555ef48f8e6299a3ea8cc6d1c"
 
     url "https://github.com/AnInsomniacy/rayburst/releases/download/v#{version}/Rayburst_#{version}_aarch64.dmg"
   end
   on_intel do
-    sha256 "edd26d4a9b834d161531151b7a44f3d81da4209f3059194d43f18ea8c8d4af91"
+    sha256 "c9892990659893bba7737eb68daf801864a861e8e180f3ef9987ebeb3c9f1c8a"
 
     url "https://github.com/AnInsomniacy/rayburst/releases/download/v#{version}/Rayburst_#{version}_x64.dmg"
   end
