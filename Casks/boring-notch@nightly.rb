@@ -1,5 +1,5 @@
 cask "boring-notch@nightly" do
-  version "2026.11.13.03.20.27.d2a124b"
+  version "2026.11.14.03.17.11.d2d1784"
   sha256 :no_check
 
   # Upstream overwrites the nightly asset in place, so any pinned checksum goes
