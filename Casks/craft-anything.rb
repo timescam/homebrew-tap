@@ -15,4 +15,5 @@ cask "craft-anything" do
   depends_on :macos
 
   app "Craft Anything.app"
+  binary "#{appdir}/Craft Anything.app/Contents/MacOS/craft-anything-cli"
 end
