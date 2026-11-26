@@ -1,7 +1,7 @@
 class GopeedWeb < Formula
   desc "A modern download manager that supports all platforms. Built with Golang and Flutter."
   homepage "https://github.com/GopeedLab/gopeed"
-  version "1.9.3"
+  version "2.0.0"
 
   livecheck do
     url :homepage
@@ -10,12 +10,12 @@ class GopeedWeb < Formula
 
   on_arm do
     url "https://github.com/GopeedLab/gopeed/releases/download/v#{version}/gopeed-web-v#{version}-macos-arm64.zip"
-    sha256 "d0a6923297c31cdcdfd9caab2e1d312b6a91a1cc3bab4d4ec43418093cc7c927"
+    sha256 "9cd6c74a62ab3c250b1f89807cc612ecfe8f1ad655084107e8db38af8aa66b6b"
   end
 
   on_intel do
     url "https://github.com/GopeedLab/gopeed/releases/download/v#{version}/gopeed-web-v#{version}-macos-amd64.zip"
-    sha256 "390c51e2406349e69a31d95bf24024fdf482d3cc4001762e7429a8add182a3c8"
+    sha256 "3b75dd384d425bc4e9c20669b4ec9c52e4cb1f1665162d46abd1715444608ece"
   end
 
   def install
